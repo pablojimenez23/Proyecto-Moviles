@@ -26,11 +26,12 @@ import com.example.proyectodd.viewmodel.InicioSesionViewModel
 import com.example.proyectodd.R
 @Composable
 fun PantallaInicioSesion(
-    viewModel: InicioSesionViewModel = viewModel(),
+    inicioSesionViewModel: InicioSesionViewModel,
     irARegistro: () -> Unit = {}
 ) {
-    val correo by viewModel.correo
-    val contrasena by viewModel.contrasena
+    var correo = inicioSesionViewModel.correo
+    var contrasena = inicioSesionViewModel.contrasena
+
 
     val negro = Color(0xFF000000)
     val gris900 = Color(0xFF111827)
@@ -51,6 +52,12 @@ fun PantallaInicioSesion(
     )
 
     var mostrarContrasena by remember { mutableStateOf(false) }
+
+    fun iniciarSesion() {
+        if (correo.isNotEmpty() && contrasena.isNotEmpty()) {
+            inicioSesionViewModel.iniciarSesion(correo, contrasena)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -130,7 +137,7 @@ fun PantallaInicioSesion(
                                 )
                                 OutlinedTextField(
                                     value = correo,
-                                    onValueChange = { viewModel.correo.value = it },
+                                    onValueChange = { inicioSesionViewModel.correo = it },
                                     modifier = Modifier.fillMaxWidth(),
                                     placeholder = { Text("aventurero@mazmorra.com", color = Color.Gray) },
                                     leadingIcon = { Icon(Icons.Default.Email, "Email", tint = rojo500) },
@@ -158,7 +165,7 @@ fun PantallaInicioSesion(
                                 )
                                 OutlinedTextField(
                                     value = contrasena,
-                                    onValueChange = { viewModel.contrasena.value = it },
+                                    onValueChange = { inicioSesionViewModel.contrasena = it },
                                     modifier = Modifier.fillMaxWidth(),
                                     placeholder = { Text("Ingresa tu secreto", color = Color.Gray) },
                                     leadingIcon = { Icon(Icons.Default.Lock, "Contraseña", tint = rojo500) },
@@ -187,7 +194,7 @@ fun PantallaInicioSesion(
 
 
                                 Button(
-                                    onClick = { viewModel.iniciarSesion() },
+                                    onClick = { iniciarSesion() },
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(48.dp)

@@ -22,18 +22,25 @@ import com.example.proyectodd.viewmodel.RegistroViewModel
 
 @Composable
 fun PantallaRegistro(
-    viewModel: RegistroViewModel = viewModel(),
+    registroViewModel: RegistroViewModel = viewModel(),
     irAInicioSesion: () -> Unit = {}
 ) {
-    val nombre by viewModel.nombre
-    val correo by viewModel.correo
-    val contrasena by viewModel.contrasena
-    val confirmarContrasena by viewModel.confirmarContrasena
 
-    val errorNombre by viewModel.errorNombre
-    val errorCorreo by viewModel.errorCorreo
-    val errorContrasena by viewModel.errorContrasena
-    val errorConfirmarContrasena by viewModel.errorConfirmarContrasena
+    val mensaje by registroViewModel.mensaje.collectAsState()
+
+    val nombre by registroViewModel.nombre
+    val correo by registroViewModel.correo
+    val contrasena by registroViewModel.contrasena
+    val confirmarContrasena by registroViewModel.confirmarContrasena
+
+
+
+    val errorNombre by registroViewModel.errorNombre
+    val errorCorreo by registroViewModel.errorCorreo
+    val errorContrasena by registroViewModel.errorContrasena
+    val errorConfirmarContrasena by registroViewModel.errorConfirmarContrasena
+
+
 
 
     val negro = Color(0xFF000000)
@@ -51,6 +58,15 @@ fun PantallaRegistro(
             RepeatMode.Reverse
         )
     )
+
+    fun registrar() {
+        if (contrasena == confirmarContrasena && nombre.isNotEmpty() && correo.isNotEmpty()) {
+            registroViewModel.registrarUsuario(nombre, correo, contrasena)
+
+        }
+    }
+
+
 
     Box(
         modifier = Modifier
@@ -80,10 +96,10 @@ fun PantallaRegistro(
                     OutlinedTextField(
                         value = nombre,
                         onValueChange = {
-                            viewModel.nombre.value = it
-                            viewModel.validarNombreEnTiempoReal()
+                            registroViewModel.nombre.value = it
+                            registroViewModel.validarNombreEnTiempoReal()
                         },
-                        label = { Text("Nombre del personaje") },
+                        label = { Text("Nombre") },
                         isError = errorNombre.isNotEmpty(),
                         singleLine = true
                     )
@@ -95,8 +111,8 @@ fun PantallaRegistro(
                     OutlinedTextField(
                         value = correo,
                         onValueChange = {
-                            viewModel.correo.value = it
-                            viewModel.validarCorreoEnTiempoReal()
+                            registroViewModel.correo.value = it
+                            registroViewModel.validarCorreoEnTiempoReal()
                         },
                         label = { Text("Correo electrónico") },
                         isError = errorCorreo.isNotEmpty(),
@@ -112,8 +128,8 @@ fun PantallaRegistro(
                     OutlinedTextField(
                         value = contrasena,
                         onValueChange = {
-                            viewModel.contrasena.value = it
-                            viewModel.validarContrasenaEnTiempoReal()
+                            registroViewModel.contrasena.value = it
+                            registroViewModel.validarContrasenaEnTiempoReal()
                         },
                         label = { Text("Contraseña") },
                         isError = errorContrasena.isNotEmpty(),
@@ -135,8 +151,8 @@ fun PantallaRegistro(
                     OutlinedTextField(
                         value = confirmarContrasena,
                         onValueChange = {
-                            viewModel.confirmarContrasena.value = it
-                            viewModel.validarConfirmarContrasenaEnTiempoReal()
+                            registroViewModel.confirmarContrasena.value = it
+                            registroViewModel.validarConfirmarContrasenaEnTiempoReal()
                         },
                         label = { Text("Confirmar contraseña") },
                         isError = errorConfirmarContrasena.isNotEmpty(),
@@ -153,10 +169,13 @@ fun PantallaRegistro(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Button(
-                        onClick = { viewModel.registrar() },
+                        onClick = { registrar() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text("CREAR AVENTURERO")
+                    }
+                    mensaje?.let {
+                        Text(it, color = Color.Green, modifier = Modifier.padding(top = 8.dp))
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))

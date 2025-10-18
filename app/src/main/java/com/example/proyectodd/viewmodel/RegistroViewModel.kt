@@ -2,9 +2,17 @@ package com.example.proyectodd.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.proyectodd.model.Personaje
+import androidx.lifecycle.viewModelScope
+import com.example.proyectodd.data.Usuario
+import com.example.proyectodd.data.UsuarioDao
 
-class RegistroViewModel : ViewModel() {
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+
+
+class RegistroViewModel(private val usuarioDao: UsuarioDao) : ViewModel() {
     var nombre = mutableStateOf("")
     var correo = mutableStateOf("")
     var contrasena = mutableStateOf("")
@@ -17,11 +25,18 @@ class RegistroViewModel : ViewModel() {
     var errorContrasena = mutableStateOf("")
     var errorConfirmarContrasena = mutableStateOf("")
 
+    private val _mensaje = MutableStateFlow<String?>(null)
+    val mensaje: StateFlow<String?> = _mensaje
+
+
 
 
 private fun validarEmail(email: String): Boolean {
     val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex()
     return email.matches(emailRegex)
+
+
+
 }
 
     fun validarCorreoEnTiempoReal() {
@@ -48,9 +63,8 @@ private fun validarEmail(email: String): Boolean {
             contrasena.value.contains(" ") -> "La contraseña no puede contener espacios"
             contrasena.value.length < 8 -> "Mínimo 8 caracteres"
             !contrasena.value.any { it.isUpperCase() } -> "Debe tener al menos una mayúscula"
-            !contrasena.value.any { it.isLowerCase() } -> "Debe tener al menos una minúscula"
             !contrasena.value.any { it.isDigit() } -> "Debe tener al menos un número"
-            !contrasena.value.any { !it.isLetterOrDigit() } -> "Debe tener al menos un carácter especial"
+
             else -> ""
         }
     }
@@ -72,14 +86,17 @@ private fun validarEmail(email: String): Boolean {
                 errorContrasena.value.isEmpty() &&
                 errorConfirmarContrasena.value.isEmpty()
     }
-    fun registrar() {
-        if (validarFormulario()) {
-            val nuevoPersonaje = Personaje(
-                nombre = nombre.value,
-                correo = correo.value,
-                contrasena = contrasena.value
-            )
-            println("Personaje creado: $nuevoPersonaje")
+    fun registrarUsuario(nombre: String, correo: String, contrasena: String) {
+        viewModelScope.launch {
+            val usuarioExistente = usuarioDao.buscarPorCorreo(correo)
+            if (usuarioExistente != null) {
+                _mensaje.value = "El correo ya está registrado"
+            } else {
+                val nuevoUsuario = Usuario(nombre = nombre, correo = correo, contrasena = contrasena)
+                usuarioDao.insertarUsuario(nuevoUsuario)
+                _mensaje.value = "Registro exitoso"
+
+            }
         }
     }
 }
