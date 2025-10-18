@@ -9,7 +9,7 @@ class RegistroViewModel : ViewModel() {
     var correo = mutableStateOf("")
     var contrasena = mutableStateOf("")
 
-    var errorMensaje = mutableStateOf("")
+
     var confirmarContrasena = mutableStateOf("")
 
     var errorNombre = mutableStateOf("")

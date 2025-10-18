@@ -1,4 +1,4 @@
-package com.example.proyectodd.ui
+package com.example.proyectodd.view
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -35,14 +35,14 @@ fun PantallaRegistro(
     val errorContrasena by viewModel.errorContrasena
     val errorConfirmarContrasena by viewModel.errorConfirmarContrasena
 
-    // Colores
+
     val negro = Color(0xFF000000)
     val rojo600 = Color(0xFFDC2626)
     val rojo500 = Color(0xFFEF4444)
     val rojo400 = Color(0xFFF87171)
     val verde = Color(0xFF10B981)
 
-    // Animación pulso
+
     val infiniteTransition = rememberInfiniteTransition()
     val scale by infiniteTransition.animateFloat(
         1f, 1.1f,
@@ -76,7 +76,7 @@ fun PantallaRegistro(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
 
-                    // --- Nombre ---
+
                     OutlinedTextField(
                         value = nombre,
                         onValueChange = {
@@ -91,7 +91,7 @@ fun PantallaRegistro(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // --- Correo ---
+
                     OutlinedTextField(
                         value = correo,
                         onValueChange = {
@@ -107,7 +107,7 @@ fun PantallaRegistro(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // --- Contraseña ---
+
                     var mostrarContrasena by remember { mutableStateOf(false) }
                     OutlinedTextField(
                         value = contrasena,
@@ -130,7 +130,7 @@ fun PantallaRegistro(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // --- Confirmar Contraseña ---
+
                     var mostrarConfirmar by remember { mutableStateOf(false) }
                     OutlinedTextField(
                         value = confirmarContrasena,

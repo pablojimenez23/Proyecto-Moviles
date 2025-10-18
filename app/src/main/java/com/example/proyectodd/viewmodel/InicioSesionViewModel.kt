@@ -7,8 +7,7 @@ class InicioSesionViewModel: ViewModel() {
 
     var correo = mutableStateOf("")
     var contrasena = mutableStateOf("")
-    var errorCorreo = mutableStateOf("")
-    var errorContrasena = mutableStateOf("")
+
 
     fun iniciarSesion() {
         // Aquí iría la lógica de autenticación

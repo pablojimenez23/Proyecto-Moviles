@@ -4,7 +4,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -72,7 +72,7 @@ fun PantallaInicioSesion(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                    // Header
+
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp)
@@ -102,7 +102,7 @@ fun PantallaInicioSesion(
                         )
                     }
 
-                    // Formulario
+
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -119,7 +119,7 @@ fun PantallaInicioSesion(
                         ) {
                             Column {
 
-                                // Correo
+
                                 Text(
                                     text = "CORREO ELECTRÓNICO",
                                     fontSize = 12.sp,
@@ -147,7 +147,7 @@ fun PantallaInicioSesion(
 
                                 Spacer(modifier = Modifier.height(24.dp))
 
-                                // Contraseña
+
                                 Text(
                                     text = "CONTRASEÑA",
                                     fontSize = 12.sp,
@@ -213,7 +213,7 @@ fun PantallaInicioSesion(
 
                                 Spacer(modifier = Modifier.height(24.dp))
 
-                                // Separador
+
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Divider(modifier = Modifier.weight(1f), color = rojo900)
                                     Text("O", modifier = Modifier.padding(horizontal = 16.dp), color = rojo900)
@@ -222,7 +222,7 @@ fun PantallaInicioSesion(
 
                                 Spacer(modifier = Modifier.height(24.dp))
 
-                                // Botón registro
+
                                 OutlinedButton(
                                     onClick = irARegistro,
                                     modifier = Modifier
