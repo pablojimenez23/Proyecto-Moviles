@@ -215,9 +215,9 @@ fun PantallaInicioSesion(
 
 
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Divider(modifier = Modifier.weight(1f), color = rojo900)
+                                     Divider(modifier = Modifier.weight(1f), color = rojo900)
                                     Text("O", modifier = Modifier.padding(horizontal = 16.dp), color = rojo900)
-                                    Divider(modifier = Modifier.weight(1f), color = rojo900)
+                                     Divider(modifier = Modifier.weight(1f), color = rojo900)
                                 }
 
                                 Spacer(modifier = Modifier.height(24.dp))
