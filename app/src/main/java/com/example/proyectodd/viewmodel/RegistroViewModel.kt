@@ -1,5 +1,6 @@
 package com.example.proyectodd.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -94,7 +95,9 @@ private fun validarEmail(email: String): Boolean {
             } else {
                 val nuevoUsuario = Usuario(nombre = nombre, correo = correo, contrasena = contrasena)
                 usuarioDao.insertarUsuario(nuevoUsuario)
+                val usuario = Usuario(0,nombre, correo, contrasena)
                 _mensaje.value = "Registro exitoso"
+                Log.d("RegistroViewModel", "Usuario guardado: $usuario")
 
             }
         }

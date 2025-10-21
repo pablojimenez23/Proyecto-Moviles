@@ -10,9 +10,13 @@ interface UsuarioDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertarUsuario(usuario: Usuario)
 
-    @Query("SELECT * FROM usuarios WHERE correo = :correo AND contrasena = :contrasena LIMIT 1")
+    @Query("SELECT * FROM usuario WHERE correo = :correo AND contrasena = :contrasena LIMIT 1")
     suspend fun obtenerUsuario(correo: String, contrasena: String): Usuario?
 
-    @Query("SELECT * FROM usuarios WHERE correo = :correo LIMIT 1")
+    @Query("SELECT * FROM usuario WHERE correo = :correo LIMIT 1")
     suspend fun buscarPorCorreo(correo: String): Usuario?
+
+    @Query("SELECT * FROM usuario WHERE correo = :correo LIMIT 1")
+    suspend fun obtenerPorCorreo(correo: String): Usuario?
 }
+

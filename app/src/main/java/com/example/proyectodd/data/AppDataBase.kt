@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Usuario::class], version = 1)
+@Database(entities = [Usuario::class], version = 2)
 abstract class AppDataBase : RoomDatabase(){
 
     abstract fun usuarioDao(): UsuarioDao
@@ -21,11 +21,16 @@ abstract class AppDataBase : RoomDatabase(){
                     context.applicationContext,
                     AppDataBase::class.java,
                     "usuarios_db"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    // 🔥 esto borra la base de datos completamente cada vez que se inicia
+                    .allowMainThreadQueries() // (solo mientras desarrollas)
+                    .build()
                 INSTANCE = instance
                 instance
             }
         }
+
+
     }
 
 

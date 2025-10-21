@@ -14,16 +14,19 @@ class InicioSesionViewModel(private val usuarioDao: UsuarioDao): ViewModel() {
     var correo by mutableStateOf("")
     var contrasena by mutableStateOf("")
 
+    var sesionIniciada = mutableStateOf(false)
+
     private val _mensaje = MutableStateFlow<String?>(null)
     val mensaje: StateFlow<String?> = _mensaje
 
 
 
-    fun iniciarSesion(correo: String, contrasena: String) {
+    fun iniciarSesion() {
         viewModelScope.launch {
-            val usuario = usuarioDao.obtenerUsuario(correo, contrasena)
-            if (usuario != null) {
-                _mensaje.value = "Inicio de sesión exitoso"
+            val usuario = usuarioDao.obtenerPorCorreo(correo)
+            if (usuario != null && usuario.contrasena == contrasena) {
+                sesionIniciada.value = true
+                _mensaje.value = ""
             } else {
                 _mensaje.value = "Correo o contraseña incorrectos"
             }

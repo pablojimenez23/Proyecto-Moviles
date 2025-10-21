@@ -4,13 +4,11 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -21,16 +19,18 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.proyectodd.viewmodel.InicioSesionViewModel
 import com.example.proyectodd.R
+import com.example.proyectodd.viewmodel.InicioSesionViewModel
+
 @Composable
 fun PantallaInicioSesion(
+
     inicioSesionViewModel: InicioSesionViewModel,
     irARegistro: () -> Unit = {}
 ) {
     var correo = inicioSesionViewModel.correo
     var contrasena = inicioSesionViewModel.contrasena
+    val mensaje by inicioSesionViewModel.mensaje.collectAsState()
 
 
     val negro = Color(0xFF000000)
@@ -55,7 +55,7 @@ fun PantallaInicioSesion(
 
     fun iniciarSesion() {
         if (correo.isNotEmpty() && contrasena.isNotEmpty()) {
-            inicioSesionViewModel.iniciarSesion(correo, contrasena)
+            inicioSesionViewModel.iniciarSesion()
         }
     }
 
@@ -194,7 +194,7 @@ fun PantallaInicioSesion(
 
 
                                 Button(
-                                    onClick = { iniciarSesion() },
+                                    onClick = { inicioSesionViewModel.iniciarSesion() },
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(48.dp)
@@ -219,7 +219,14 @@ fun PantallaInicioSesion(
                                 }
 
                                 Spacer(modifier = Modifier.height(24.dp))
-
+                                if (mensaje != null) {
+                                    Text(
+                                        text = mensaje ?: "" ,
+                                        fontSize = 12.sp,
+                                        color = Color.Red,
+                                        modifier = Modifier.padding(top = 8.dp)
+                                    )
+                                }
 
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                      Divider(modifier = Modifier.weight(1f), color = rojo900)
@@ -242,7 +249,7 @@ fun PantallaInicioSesion(
                                     border = BorderStroke(2.dp, rojo800),
                                     shape = RoundedCornerShape(4.dp)
                                 ) {
-                                    Text("CREAR NUEVO PERSONAJE", fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+                                    Text("CREAR NUEVO USUARIO", fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
                                 }
                             }
                         }
