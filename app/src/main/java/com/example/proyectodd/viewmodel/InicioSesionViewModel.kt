@@ -27,6 +27,7 @@ class InicioSesionViewModel(private val usuarioDao: UsuarioDao): ViewModel() {
             if (usuario != null && usuario.contrasena == contrasena) {
                 sesionIniciada.value = true
                 _mensaje.value = ""
+                
             } else {
                 _mensaje.value = "Correo o contraseña incorrectos"
             }
