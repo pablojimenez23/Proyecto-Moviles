@@ -1,5 +1,6 @@
 package com.example.proyectodd.pantallas
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -12,8 +13,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,13 +44,37 @@ fun PantallaRegistro(
 
     val estadoAuth by viewModel.estadoAuth.collectAsStateWithLifecycle()
 
-    // Colores
+    //Colores
     val rojoOscuro = Color(0xFF991B1B)
     val rojoMedio = Color(0xFFDC2626)
     val rojoClaro = Color(0xFFEF4444)
     val rojoMuyOscuro = Color(0xFF7F1D1D)
     val negro = Color(0xFF000000)
     val grisOscuro = Color(0xFF1F1F1F)
+
+    //animacion escudo
+    val infiniteTransition = rememberInfiniteTransition(label = "shield_pulse")
+
+    val scale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.12f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = EaseInOutCubic),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "scale"
+    )
+
+    //animacion brillo
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 0.75f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = EaseInOutCubic),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "alpha"
+    )
 
     LaunchedEffect(estadoAuth) {
         if (estadoAuth is AuthUIState.Exito) {
@@ -74,11 +101,15 @@ fun PantallaRegistro(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(bottom = 32.dp)
             ) {
+                // Escudo animado con pulso
                 Icon(
                     painter = painterResource(id = R.drawable.ic_shield_outline),
                     contentDescription = "Escudo",
                     tint = rojoMedio,
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier
+                        .size(64.dp)
+                        .scale(scale)
+                        .graphicsLayer(alpha = alpha)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -385,6 +416,7 @@ fun PantallaRegistro(
                         }
 
                         Spacer(modifier = Modifier.height(24.dp))
+
                         OutlinedButton(
                             onClick = irAInicioSesion,
                             modifier = Modifier

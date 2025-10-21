@@ -1,5 +1,6 @@
 package com.example.proyectodd.pantallas
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -12,8 +13,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -46,6 +49,29 @@ fun PantallaInicioSesion(
     val negro = Color(0xFF000000)
     val grisOscuro = Color(0xFF1F1F1F)
 
+    //animacion pulso calavera
+    val infiniteTransition = rememberInfiniteTransition(label = "skull_pulse")
+    val scale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.15f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = EaseInOutCubic),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "scale"
+    )
+
+    //animacion de brillo calavera
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 0.7f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = EaseInOutCubic),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "alpha"
+    )
+
     LaunchedEffect(estadoAuth) {
         if (estadoAuth is AuthUIState.Exito) {
             alExito()
@@ -70,11 +96,15 @@ fun PantallaInicioSesion(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(bottom = 32.dp)
             ) {
+                // Calavera animada con pulso
                 Icon(
                     painter = painterResource(id = R.drawable.ic_skull),
                     contentDescription = "Calavera",
                     tint = rojoMedio,
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier
+                        .size(64.dp)
+                        .scale(scale)
+                        .graphicsLayer(alpha = alpha)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
