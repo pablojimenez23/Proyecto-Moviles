@@ -1,17 +1,15 @@
 package com.example.proyectodd.navegacion
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.proyectodd.pantallas.PantallaInicio
-import com.example.proyectodd.pantallas.PantallaInicioSesion
-import com.example.proyectodd.pantallas.PantallaRegistro
+import com.example.proyectodd.pantallas.*
 import com.example.proyectodd.viewmodel.AuthViewModel
 
 sealed class Rutas(val ruta: String) {
+    object Splash : Rutas("splash")
     object Login : Rutas("login")
     object Registro : Rutas("registro")
     object Inicio : Rutas("inicio")
@@ -24,8 +22,18 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
 
     NavHost(
         navController = navController,
-        startDestination = Rutas.Login.ruta
+        startDestination = Rutas.Splash.ruta
     ) {
+        composable(Rutas.Splash.ruta) {
+            PantallaSplash(
+                onSplashFinished = {
+                    navController.navigate(Rutas.Login.ruta) {
+                        popUpTo(Rutas.Splash.ruta) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(Rutas.Login.ruta) {
             PantallaInicioSesion(
                 viewModel = viewModel,
