@@ -7,7 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.proyectodd.pantallas.*
+import com.example.proyectodd.view.*
 import com.example.proyectodd.viewmodel.AuthViewModel
 
 sealed class Rutas(val ruta: String) {

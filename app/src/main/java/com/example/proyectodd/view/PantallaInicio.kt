@@ -1,4 +1,4 @@
-package com.example.proyectodd.pantallas
+package com.example.proyectodd.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

@@ -1,4 +1,4 @@
-package com.example.proyectodd.pantallas
+package com.example.proyectodd.view
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
