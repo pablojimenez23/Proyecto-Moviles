@@ -109,7 +109,7 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
             }
         ) {
             usuarioActual?.let { usuario ->
-                PantallaInicio(
+                MenuPrincipalScreen (
                     usuario = usuario,
                     cerrarSesion = {
                         viewModel.cerrarSesion()
