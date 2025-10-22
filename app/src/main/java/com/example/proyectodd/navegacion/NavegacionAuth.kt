@@ -1,5 +1,7 @@
 package com.example.proyectodd.navegacion
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
@@ -22,9 +24,21 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
 
     NavHost(
         navController = navController,
-        startDestination = Rutas.Splash.ruta
+        startDestination = Rutas.Splash.ruta,
+        enterTransition = {
+            fadeIn(animationSpec = tween(800))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(800))
+        }
     ) {
-        composable(Rutas.Splash.ruta) {
+        // PANTALLA SPLASH
+        composable(
+            route = Rutas.Splash.ruta,
+            exitTransition = {
+                fadeOut(animationSpec = tween(500))
+            }
+        ) {
             PantallaSplash(
                 onSplashFinished = {
                     navController.navigate(Rutas.Login.ruta) {
@@ -34,7 +48,16 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
             )
         }
 
-        composable(Rutas.Login.ruta) {
+        // PANTALLA LOGIN
+        composable(
+            route = Rutas.Login.ruta,
+            enterTransition = {
+                fadeIn(animationSpec = tween(600))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(600))
+            }
+        ) {
             PantallaInicioSesion(
                 viewModel = viewModel,
                 irARegistro = {
@@ -50,7 +73,16 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
             )
         }
 
-        composable(Rutas.Registro.ruta) {
+        // PANTALLA REGISTRO
+        composable(
+            route = Rutas.Registro.ruta,
+            enterTransition = {
+                fadeIn(animationSpec = tween(600))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(600))
+            }
+        ) {
             PantallaRegistro(
                 viewModel = viewModel,
                 irAInicioSesion = {
@@ -66,7 +98,16 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
             )
         }
 
-        composable(Rutas.Inicio.ruta) {
+        // PANTALLA INICIO
+        composable(
+            route = Rutas.Inicio.ruta,
+            enterTransition = {
+                fadeIn(animationSpec = tween(600))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(600))
+            }
+        ) {
             usuarioActual?.let { usuario ->
                 PantallaInicio(
                     usuario = usuario,

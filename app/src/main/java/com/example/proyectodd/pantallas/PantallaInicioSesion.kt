@@ -96,7 +96,7 @@ fun PantallaInicioSesion(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(bottom = 32.dp)
             ) {
-                // Calavera animada con pulso
+                //calavera animada con pulso
                 Icon(
                     painter = painterResource(id = R.drawable.ic_skull),
                     contentDescription = "Calavera",

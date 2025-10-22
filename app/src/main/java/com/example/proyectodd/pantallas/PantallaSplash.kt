@@ -17,8 +17,9 @@ import kotlinx.coroutines.delay
 @Composable
 fun PantallaSplash(onSplashFinished: () -> Unit) {
     var startAnimation by remember { mutableStateOf(false) }
+    var shouldNavigate by remember { mutableStateOf(false) }
 
-    //animacion inicial
+    // Animación inicial
     val alphaAnim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
         animationSpec = tween(
@@ -28,18 +29,7 @@ fun PantallaSplash(onSplashFinished: () -> Unit) {
         label = "alpha"
     )
 
-    //animacion final
-    var fadeOut by remember { mutableStateOf(false) }
-    val fadeOutAnim = animateFloatAsState(
-        targetValue = if (fadeOut) 0f else 1f,
-        animationSpec = tween(
-            durationMillis = 800,
-            easing = FastOutSlowInEasing
-        ),
-        label = "fadeOut"
-    )
-
-    //animacion de escala suave
+    // Animación de escala suave
     val scaleAnim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0.85f,
         animationSpec = tween(
@@ -49,22 +39,28 @@ fun PantallaSplash(onSplashFinished: () -> Unit) {
         label = "scale"
     )
 
-    //secuencia de animaciones
+    // Secuencia de animaciones
     LaunchedEffect(Unit) {
         startAnimation = true
         delay(2500)
-        fadeOut = true
-        delay(800)
-        onSplashFinished()
+        startAnimation = false
+        delay(1000)
+        shouldNavigate = true
+    }
+
+    LaunchedEffect(shouldNavigate) {
+        if (shouldNavigate) {
+            onSplashFinished()
+        }
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
-            .alpha(fadeOutAnim.value),
+            .background(Color.Black),
         contentAlignment = Alignment.Center
     ) {
+        // Logo D&D
         Image(
             painter = painterResource(id = R.drawable.dnd_logo),
             contentDescription = "Dungeons & Dragons Logo",
