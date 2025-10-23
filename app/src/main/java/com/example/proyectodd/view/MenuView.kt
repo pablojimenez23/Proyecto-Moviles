@@ -29,7 +29,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit) {
+fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpersonaje:()-> Unit) {
     val negro = Color(0xFF0D0D0D)
     val rojo600 = Color(0xFFB71C1C)
     val rojo800 = Color(0xFF7A0000)
@@ -124,7 +124,7 @@ fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit) {
 
 
                                 Button(
-                                    onClick = { /* TODO: Crear personaje */ },
+                                    onClick = { creacionpersonaje},
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(50.dp)

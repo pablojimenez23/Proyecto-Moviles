@@ -4,17 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.proyectodd.data.local.dao.PersonajeDao
 import com.example.proyectodd.data.local.dao.UsuarioDao
 import com.example.proyectodd.data.model.Usuario
+import com.example.proyectodd.data.model.Personaje
 
 @Database(
-    entities = [Usuario::class],
-    version = 1,
+    entities = [Usuario::class, Personaje::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun usuarioDao(): UsuarioDao
+    abstract fun personajeDao(): PersonajeDao
 
     companion object {
         @Volatile

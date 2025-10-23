@@ -15,6 +15,7 @@ sealed class Rutas(val ruta: String) {
     object Login : Rutas("login")
     object Registro : Rutas("registro")
     object Inicio : Rutas("inicio")
+    object  CrearPersonaje : Rutas("personajes")
 }
 
 @Composable
@@ -116,7 +117,29 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
                         navController.navigate(Rutas.Login.ruta) {
                             popUpTo(Rutas.Inicio.ruta) { inclusive = true }
                         }
+                    }, creacionpersonaje = {
+
+                            navController.navigate(Rutas.CrearPersonaje.ruta) {
+                                popUpTo(Rutas.Inicio.ruta) { inclusive = true }
+                            }
                     }
+                )
+            }
+        }
+        // CREADOR DE PERSONAJES
+        composable(
+            route = Rutas.CrearPersonaje.ruta,
+            enterTransition = {
+                fadeIn(animationSpec = tween(600))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(600))
+            }
+        ) {
+            usuarioActual?.let { usuario ->
+                CardDndForm (
+                    usuario = usuario
+
                 )
             }
         }
