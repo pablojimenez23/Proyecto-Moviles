@@ -6,9 +6,8 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/dragon_icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="DnD Auth"
-        android:roundIcon="@drawable/dragon_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoDd"
         tools:targetApi="31">

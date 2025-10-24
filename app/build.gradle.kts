@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.proyectodd"
-        minSdk = 33        // ✅ CAMBIADO A TIRAMISU (Android 13)
+        minSdk = 33
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
