@@ -1,6 +1,6 @@
-package com.example.proyectodd.ui.state
+package com.example.proyectodd.viewmodel.state
 
-import com.example.proyectodd.data.model.Usuario
+import com.example.proyectodd.model.Usuario
 
 sealed class AuthUIState {
     object Inactivo : AuthUIState()

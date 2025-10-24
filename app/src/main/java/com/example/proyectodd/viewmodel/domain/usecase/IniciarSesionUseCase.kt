@@ -1,8 +1,8 @@
-package com.example.proyectodd.domain.usecase
+package com.example.proyectodd.viewmodel.domain.usecase
 
-import com.example.proyectodd.data.model.Usuario
-import com.example.proyectodd.data.repository.AuthRepository
-import com.example.proyectodd.domain.validator.AuthValidator
+import com.example.proyectodd.model.Usuario
+import com.example.proyectodd.model.data.repository.AuthRepository
+import com.example.proyectodd.viewmodel.domain.validator.AuthValidator
 
 class IniciarSesionUseCase(private val repository: AuthRepository) {
 

@@ -2,7 +2,7 @@ package com.example.proyectodd.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.proyectodd.data.repository.PersonajeRepository
+import com.example.proyectodd.model.data.repository.PersonajeRepository
 
 class PersonajeViewModelFactory(
     private val repo: PersonajeRepository

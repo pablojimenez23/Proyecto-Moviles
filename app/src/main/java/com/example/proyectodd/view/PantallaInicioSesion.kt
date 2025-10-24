@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.proyectodd.R
-import com.example.proyectodd.ui.state.AuthUIState
+import com.example.proyectodd.viewmodel.state.AuthUIState
 import com.example.proyectodd.viewmodel.AuthViewModel
 
 @Composable

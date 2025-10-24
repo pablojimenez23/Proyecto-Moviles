@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyectodd.data.model.Usuario
+import com.example.proyectodd.model.Usuario
 
 @Composable
 fun PantallaInicio(usuario: Usuario, cerrarSesion: () -> Unit) {

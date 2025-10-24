@@ -1,4 +1,6 @@
-package com.example.proyectodd.domain.validator
+package com.example.proyectodd.viewmodel.domain.validator
+
+import android.util.Patterns
 
 object AuthValidator {
 
@@ -13,7 +15,7 @@ object AuthValidator {
     fun validarCorreo(correo: String): String? {
         return when {
             correo.isBlank() -> "El correo no puede estar vacío"
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches() ->
+            !Patterns.EMAIL_ADDRESS.matcher(correo).matches() ->
                 "Correo electrónico inválido"
             else -> null
         }

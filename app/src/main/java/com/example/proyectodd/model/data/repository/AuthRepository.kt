@@ -1,7 +1,7 @@
-package com.example.proyectodd.data.repository
+package com.example.proyectodd.model.data.repository
 
-import com.example.proyectodd.data.model.Usuario
-import com.example.proyectodd.data.source.AuthDataSource
+import com.example.proyectodd.model.Usuario
+import com.example.proyectodd.model.data.source.AuthDataSource
 
 class AuthRepository(private val dataSource: AuthDataSource) {
 

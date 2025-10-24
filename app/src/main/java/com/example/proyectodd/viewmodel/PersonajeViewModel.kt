@@ -3,8 +3,8 @@ package com.example.proyectodd.viewmodel
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.proyectodd.data.model.Personaje
-import com.example.proyectodd.data.repository.PersonajeRepository
+import com.example.proyectodd.model.Personaje
+import com.example.proyectodd.model.data.repository.PersonajeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

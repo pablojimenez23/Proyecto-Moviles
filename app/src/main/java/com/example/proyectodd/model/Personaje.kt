@@ -1,4 +1,4 @@
-package com.example.proyectodd.data.model
+package com.example.proyectodd.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

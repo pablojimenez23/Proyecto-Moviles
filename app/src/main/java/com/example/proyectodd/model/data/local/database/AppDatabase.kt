@@ -1,13 +1,13 @@
-package com.example.proyectodd.data.local.database
+package com.example.proyectodd.model.data.local.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.proyectodd.data.local.dao.PersonajeDao
-import com.example.proyectodd.data.local.dao.UsuarioDao
-import com.example.proyectodd.data.model.Usuario
-import com.example.proyectodd.data.model.Personaje
+import com.example.proyectodd.model.data.local.dao.PersonajeDao
+import com.example.proyectodd.model.data.local.dao.UsuarioDao
+import com.example.proyectodd.model.Usuario
+import com.example.proyectodd.model.Personaje
 
 @Database(
     entities = [Usuario::class, Personaje::class],

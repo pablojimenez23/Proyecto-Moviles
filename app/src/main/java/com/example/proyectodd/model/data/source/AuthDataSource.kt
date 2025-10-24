@@ -1,7 +1,7 @@
-package com.example.proyectodd.data.source
+package com.example.proyectodd.model.data.source
 
-import com.example.proyectodd.data.local.dao.UsuarioDao
-import com.example.proyectodd.data.model.Usuario
+import com.example.proyectodd.model.data.local.dao.UsuarioDao
+import com.example.proyectodd.model.Usuario
 import java.security.MessageDigest
 
 class AuthDataSource(private val usuarioDao: UsuarioDao) {

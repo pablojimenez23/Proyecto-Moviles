@@ -37,14 +37,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyectodd.data.local.database.AppDatabase
-import com.example.proyectodd.data.repository.PersonajeRepository
+import com.example.proyectodd.model.data.local.database.AppDatabase
+import com.example.proyectodd.model.data.repository.PersonajeRepository
 import coil.compose.rememberAsyncImagePainter
-import com.example.proyectodd.data.model.Usuario
+import com.example.proyectodd.model.Usuario
 
 
 /* Estilo simple blanco/gris con bordes finos */

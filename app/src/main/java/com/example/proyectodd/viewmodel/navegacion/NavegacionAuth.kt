@@ -1,4 +1,4 @@
-package com.example.proyectodd.navegacion
+package com.example.proyectodd.viewmodel.navegacion
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
