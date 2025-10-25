@@ -1,20 +1,29 @@
 package com.example.proyectodd.model.data.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.proyectodd.model.Personaje
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PersonajeDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(personaje: Personaje)
 
-    @Query("SELECT * FROM personajes WHERE id = 1 LIMIT 1")
-    fun observePersonaje(): Flow<Personaje?>
+    // LISTADO REACTIVO
+    @Query("SELECT * FROM personajes ORDER BY LOWER(nombre) ASC")
+    fun observeAll(): Flow<List<Personaje>>
 
-    @Query("SELECT * FROM personajes WHERE id = 1 LIMIT 1")
-    suspend fun getOnce(): Personaje?
+    // OBTENER UNO POR ID
+    @Query("SELECT * FROM personajes WHERE id = :id LIMIT 1")
+    suspend fun getById(id: Long): Personaje?
+
+    // INSERTAR NUEVO
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    suspend fun insert(p: Personaje): Long
+
+    // ACTUALIZAR EXISTENTE
+    @Update
+    suspend fun update(p: Personaje)
+
+    // ELIMINAR (opcional, por si luego agregamos borrar)
+    @Delete
+    suspend fun delete(p: Personaje)
 }

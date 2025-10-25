@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "personajes")
 data class Personaje(
-    @PrimaryKey val id: Int = 1,            // único registro (tu “hoja”)
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     val nombre: String = "",
     val clase: String = "",
     val raza: String = "",
@@ -26,6 +26,5 @@ data class Personaje(
     val car: Int = 0,
     val saveDC: Int = 0,
     val playerName: String = "",
-    // URI de la imagen del “Portrait”
     val portraitUri: String? = null
 )
