@@ -22,7 +22,7 @@ import com.example.proyectodd.model.Usuario
 
 
 @Composable
-fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpersonaje: () -> Unit) {
+fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpersonaje: () -> Unit, irPersonajeGuardado: ()-> Unit) {
     val negro = Color(0xFF000000)
     val rojoOscuro = Color(0xFF991B1B)
     val rojoMedio = Color(0xFFDC2626)
@@ -162,7 +162,7 @@ fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpers
 
                                 //Boton ver personajes
                                 Button(
-                                    onClick = { /* TODO: Ver personajes guardados */ },
+                                    onClick =  irPersonajeGuardado ,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(52.dp)

@@ -70,12 +70,12 @@ fun CardDndForm(
     val estado by vm.estado.collectAsState()
 
 
-    var characterName by rememberSaveable { mutableStateOf("") }
-    var level by rememberSaveable { mutableStateOf("") }
-    var race by rememberSaveable { mutableStateOf("") }
-    var clazz by rememberSaveable { mutableStateOf("") }
-    var background by rememberSaveable { mutableStateOf("") }
-    var alignment by rememberSaveable { mutableStateOf("") }
+    var characterName by remember { mutableStateOf("") }
+    var level by remember{ mutableStateOf("") }
+    var race by remember { mutableStateOf("") }
+    var clazz by remember { mutableStateOf("") }
+    var background by remember { mutableStateOf("") }
+    var alignment by remember{ mutableStateOf("") }
 
     var str by rememberSaveable { mutableStateOf("") }
     var dex by rememberSaveable { mutableStateOf("") }

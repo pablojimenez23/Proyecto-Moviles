@@ -27,7 +27,7 @@ sealed class Rutas(val ruta: String) {
 
     // Mantenemos la misma clave que ya usas para ir al módulo de personajes desde el menú.
     // AHORA esta ruta muestra la LISTA de personajes.
-    object CrearPersonaje : Rutas("personajes")
+    object ListaPersonaje : Rutas("personajes")
 
     // NUEVAS subrutas para crear/editar
     object PersonajeCrear : Rutas("personajes/crear")
@@ -130,19 +130,27 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
                             popUpTo(Rutas.Inicio.ruta) { inclusive = true }
                         }
                     },
-                    creacionpersonaje = {
-
-                        navController.navigate(Rutas.CrearPersonaje.ruta) {
+                    irPersonajeGuardado = {
+                        navController.navigate(Rutas.ListaPersonaje.ruta) {
                             popUpTo(Rutas.Inicio.ruta) { inclusive = true }
                         }
+                    },
+                    creacionpersonaje = {
+
+                        navController.navigate(Rutas.PersonajeCrear.ruta) {
+                            popUpTo(Rutas.Inicio.ruta) { inclusive = true }
+                        }
+
+
                     }
+
                 )
             }
         }
 
         // LISTA DE PERSONAJES
         composable(
-            route = Rutas.CrearPersonaje.ruta,
+            route = Rutas.ListaPersonaje.ruta,
             enterTransition = { fadeIn(animationSpec = tween(600)) },
             exitTransition = { fadeOut(animationSpec = tween(600)) }
         ) {
@@ -157,7 +165,7 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
         }
 
         // CREAR PERSONAJE
-        composable(Rutas.CrearPersonaje.ruta) {
+        composable(Rutas.PersonajeCrear.ruta) {
             val usuario = usuarioActual ?: return@composable
             PersonajeCrearView(
                 vm = personajesVM,
