@@ -171,7 +171,9 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
                 vm = personajesVM,
                 usuario = usuario,
                 onCancel = { navController.popBackStack() },
-                onSaved  = { navController.popBackStack() }
+                onSaved  = { navController.navigate(Rutas.Inicio.ruta) {
+                    popUpTo(Rutas.PersonajeCrear.ruta) { inclusive = true }
+                } }
             )
         }
 
