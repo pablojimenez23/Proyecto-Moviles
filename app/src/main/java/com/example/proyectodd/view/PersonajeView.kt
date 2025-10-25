@@ -43,10 +43,10 @@ import java.util.Date
 import java.util.Locale
 
 
-private val Bg = Color(0xFFF7F7F7)
-private val Card = Color(0xFFFFFFFF)
-private val Line = Color(0xFF2F2F2F)
-private val Hint = Color(0xFF666666)
+private val Bg = Color(0xFF000000)
+private val Card = Color(0xFF292929)
+private val Line = Color(0xFF7F1D1D)
+private val Hint = Color(0xFFFFFFFF)
 
 
 @Composable
@@ -254,7 +254,7 @@ fun CardDndForm(
             Spacer(Modifier.height(16.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedButton(onClick = onCancel) { Text("Cancelar") }
-                Button(onClick = { vm.guardar(onSaved) }) { Text("Guardar") }
+                Button(onClick = { vm.guardar(onSaved) }) { Text("Guardar", color = Color.White) }
             }
         }
     }
@@ -503,9 +503,12 @@ private fun PortraitPicker(
         }
 
         Spacer(Modifier.height(6.dp))
-        Button(onClick = { requestCameraPermission.launch(Manifest.permission.CAMERA) }) {
-            Text("Cámara")
+        Row (modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { requestCameraPermission.launch(Manifest.permission.CAMERA) }) {
+                Text("Cámara", color = Color.White)
+            }
         }
+
     }
 }
 
