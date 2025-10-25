@@ -83,8 +83,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun resetearEstado() {
-        _estadoAuth.value = AuthUIState.Inactivo
-    }
+        _estadoAuth.value = AuthUIState.Inactivo }
+
 
     fun cerrarSesion() {
         _usuarioActual.value = null
