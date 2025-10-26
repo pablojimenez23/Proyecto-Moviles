@@ -22,13 +22,16 @@ import com.example.proyectodd.model.Usuario
 
 
 @Composable
-fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpersonaje: () -> Unit, irPersonajeGuardado: ()-> Unit) {
+fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpersonaje: () -> Unit, irPersonajeGuardado: () -> Unit) {
     val negro = Color(0xFF000000)
     val rojoOscuro = Color(0xFF991B1B)
     val rojoMedio = Color(0xFFDC2626)
     val rojoClaro = Color(0xFFEF4444)
     val rojoMuyOscuro = Color(0xFF7F1D1D)
     val grisOscuro = Color(0xFF1F1F1F)
+
+    //Sonido
+    val playSound = rememberSoundPlayer(R.raw.sword_clash)
 
     var iniciandoCierreSesion by remember { mutableStateOf(false) }
     val alphaAnimacion by animateFloatAsState(
@@ -134,7 +137,10 @@ fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpers
                             ) {
                                 //Boton crear personajes
                                 Button(
-                                    onClick = { creacionpersonaje() },
+                                    onClick = {
+                                        playSound()
+                                        creacionpersonaje()
+                                    },
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(52.dp)
@@ -162,7 +168,10 @@ fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpers
 
                                 //Boton ver personajes
                                 Button(
-                                    onClick =  irPersonajeGuardado ,
+                                    onClick = {
+                                        playSound()
+                                        irPersonajeGuardado()
+                                    },
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(52.dp)
@@ -217,7 +226,10 @@ fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpers
 
                                 //boton cerrar sesion
                                 OutlinedButton(
-                                    onClick = { iniciandoCierreSesion = true },
+                                    onClick = {
+                                        playSound()
+                                        iniciandoCierreSesion = true
+                                    },
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(52.dp),

@@ -42,6 +42,9 @@ fun PantallaInicioSesion(
 
     val estadoAuth by viewModel.estadoAuth.collectAsStateWithLifecycle()
 
+    //Sonido
+    val playSound = rememberSoundPlayer(R.raw.sword_clash)
+
     val rojoOscuro = Color(0xFF991B1B)
     val rojoMedio = Color(0xFFDC2626)
     val rojoClaro = Color(0xFFEF4444)
@@ -249,7 +252,10 @@ fun PantallaInicioSesion(
 
                         //boton de login
                         Button(
-                            onClick = { viewModel.iniciarSesion(correo, contrasena) },
+                            onClick = {
+                                playSound()
+                                viewModel.iniciarSesion(correo, contrasena)
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(52.dp)
@@ -327,7 +333,10 @@ fun PantallaInicioSesion(
 
                         //boton de registro
                         OutlinedButton(
-                            onClick = irARegistro,
+                            onClick = {
+                                playSound()
+                                irARegistro()
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(52.dp),

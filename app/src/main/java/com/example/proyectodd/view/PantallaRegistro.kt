@@ -44,6 +44,9 @@ fun PantallaRegistro(
 
     val estadoAuth by viewModel.estadoAuth.collectAsStateWithLifecycle()
 
+    //Sonido
+    val playSound = rememberSoundPlayer(R.raw.sword_clash)
+
     //Colores
     val rojoOscuro = Color(0xFF991B1B)
     val rojoMedio = Color(0xFFDC2626)
@@ -338,6 +341,7 @@ fun PantallaRegistro(
                         //boton de registro
                         Button(
                             onClick = {
+                                playSound()
                                 viewModel.registrarUsuario(
                                     nombre, correo, contrasena, confirmarContrasena
                                 )
@@ -418,7 +422,10 @@ fun PantallaRegistro(
                         Spacer(modifier = Modifier.height(24.dp))
 
                         OutlinedButton(
-                            onClick = irAInicioSesion,
+                            onClick = {
+                                playSound()
+                                irAInicioSesion()
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(52.dp),
