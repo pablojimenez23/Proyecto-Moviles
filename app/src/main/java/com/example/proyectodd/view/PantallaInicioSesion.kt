@@ -1,5 +1,6 @@
 package com.example.proyectodd.view
 
+import android.widget.Toast
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.proyectodd.R
 import com.example.proyectodd.viewmodel.state.AuthUIState
 import com.example.proyectodd.viewmodel.AuthViewModel
+import androidx.compose.ui.platform.LocalContext
 
 
 
@@ -41,7 +43,7 @@ fun PantallaInicioSesion(
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var mostrarContrasena by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
     val estadoAuth by viewModel.estadoAuth.collectAsStateWithLifecycle()
 
     //Sonido
@@ -83,6 +85,7 @@ fun PantallaInicioSesion(
             viewModel.resetearEstado()
         }
     }
+
 
     Box(
         modifier = Modifier

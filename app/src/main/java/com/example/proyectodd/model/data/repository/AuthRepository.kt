@@ -19,7 +19,7 @@ class AuthRepository(private val dataSource: AuthDataSource) {
             val nuevoUsuario = Usuario(
                 nombre = nombre,
                 correo = correo,
-                contrasenaHash = contrasenaHash
+                contrasena = contrasena
             )
 
             val userId = dataSource.insertarUsuario(nuevoUsuario)
@@ -38,7 +38,7 @@ class AuthRepository(private val dataSource: AuthDataSource) {
 
             val contrasenaHash = dataSource.hashearContrasena(contrasena)
 
-            if (usuario.contrasenaHash == contrasenaHash) {
+            if (usuario.contrasena == contrasena) {
                 Result.success(usuario)
             } else {
                 Result.failure(Exception("Contraseña incorrecta"))

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.proyectodd.model.data.local.database.AppDatabase
 import com.example.proyectodd.model.Usuario
 import com.example.proyectodd.model.data.repository.AuthRepository
+import com.example.proyectodd.model.data.repository.UsuarioRepositorio
 import com.example.proyectodd.model.data.source.AuthDataSource
 import com.example.proyectodd.viewmodel.domain.usecase.IniciarSesionUseCase
 import com.example.proyectodd.viewmodel.domain.usecase.RegistrarUsuarioUseCase
@@ -23,6 +24,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val iniciarSesionUseCase = IniciarSesionUseCase(repository)
     private val registrarUsuarioUseCase = RegistrarUsuarioUseCase(repository)
 
+    private val apiRepository = UsuarioRepositorio()
+
+
     private val _estadoAuth = MutableStateFlow<AuthUIState>(AuthUIState.Inactivo)
     val estadoAuth: StateFlow<AuthUIState> = _estadoAuth.asStateFlow()
 
@@ -34,20 +38,31 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 _estadoAuth.value = AuthUIState.Cargando
 
-                val resultado = iniciarSesionUseCase(correo, contrasena)
+                // 1. Hacemos un GET a la API para traer los usuarios
+                val resultado = apiRepository.obtenerClientes()
 
-                resultado.onSuccess { usuario ->
-                    _usuarioActual.value = usuario
-                    _estadoAuth.value = AuthUIState.Exito(usuario)
-                }.onFailure { exception ->
+                resultado.onSuccess { listaUsuarios ->
+
+                    val usuarioEncontrado = listaUsuarios.find {
+                        it.correo == correo && it.contrasena == contrasena
+                    }
+
+                    if (usuarioEncontrado != null) {
+                        _usuarioActual.value = usuarioEncontrado
+                        _estadoAuth.value = AuthUIState.Exito(usuarioEncontrado)
+                    } else {
+                        _estadoAuth.value = AuthUIState.Error("Credenciales incorrectas o usuario no encontrado en la Nube")
+                    }
+                }
+
+                resultado.onFailure { exception ->
                     _estadoAuth.value = AuthUIState.Error(
-                        exception.message ?: "Error desconocido"
+                        "Error de conexión: ${exception.message}"
                     )
                 }
+
             } catch (e: Exception) {
-                _estadoAuth.value = AuthUIState.Error(
-                    "Error inesperado: ${e.message}"
-                )
+                _estadoAuth.value = AuthUIState.Error("Error inesperado: ${e.message}")
             }
         }
     }
@@ -62,22 +77,41 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 _estadoAuth.value = AuthUIState.Cargando
 
-                val resultado = registrarUsuarioUseCase(
-                    nombre, correo, contrasena, confirmarContrasena
+
+                if (contrasena != confirmarContrasena) {
+                    _estadoAuth.value = AuthUIState.Error("Las contraseñas no coinciden")
+                    return@launch
+                }
+                if (nombre.isEmpty() || correo.isEmpty()) {
+                    _estadoAuth.value = AuthUIState.Error("Completa todos los campos")
+                    return@launch
+                }
+
+
+                val nuevoUsuario = Usuario(
+                    id = 0,
+                    nombre = nombre,
+                    correo = correo,
+                    contrasena = contrasena
+
                 )
 
-                resultado.onSuccess { usuario ->
-                    _usuarioActual.value = usuario
-                    _estadoAuth.value = AuthUIState.Exito(usuario)
-                }.onFailure { exception ->
+
+                val resultado = apiRepository.agregarCliente(nuevoUsuario)
+
+                resultado.onSuccess { usuarioCreado ->
+                    _usuarioActual.value = usuarioCreado
+                    _estadoAuth.value = AuthUIState.Exito(usuarioCreado)
+                }
+
+                resultado.onFailure { exception ->
                     _estadoAuth.value = AuthUIState.Error(
-                        exception.message ?: "Error desconocido"
+                        "Error al registrar: ${exception.message}"
                     )
                 }
+
             } catch (e: Exception) {
-                _estadoAuth.value = AuthUIState.Error(
-                    "Error inesperado: ${e.message}"
-                )
+                _estadoAuth.value = AuthUIState.Error("Error inesperado: ${e.message}")
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyectodd.model.Personaje
 import com.example.proyectodd.model.data.repository.PersonajeRepository
+import com.example.proyectodd.model.data.repository.UsuarioRepositorio
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -12,16 +13,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.text.lowercase
 
 class PersonajeViewModel(
     private val repo: PersonajeRepository
+
 ) : ViewModel() {
 
 
-    val lista: StateFlow<List<Personaje>> =
-        repo.observeAll()
-            .map { it.sortedBy { p -> p.nombre.lowercase() } }
-            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    private val _lista = MutableStateFlow<List<Personaje>>(emptyList())
+    val lista: StateFlow<List<Personaje>> = _lista.asStateFlow()
 
 
     private val _estado = MutableStateFlow(vacio())
@@ -101,4 +102,5 @@ class PersonajeViewModel(
         }
     }
 
-}
+    }
+
