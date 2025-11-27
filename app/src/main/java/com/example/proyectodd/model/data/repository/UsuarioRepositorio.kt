@@ -6,59 +6,88 @@ import com.example.proyectodd.viewmodel.retrofit.RetrofitUsuario
 
 class UsuarioRepositorio {
 
-    suspend fun obtenerTodos(): List<Usuario> {
-        return try {
-            val res = RetrofitUsuario.usuarioApi.obtenerClientes()
 
-            if (res.isSuccessful) res.body() ?: emptyList() else emptyList()
-        } catch (e: Exception) {
-            emptyList()
-        }
+
+    private fun crearCredencialesMap(email: String, password: String): Map<String, String> {
+        return mapOf(
+            "email" to email,
+
+            "password" to password
+        )
     }
 
 
-    suspend fun obtenerClientes(): Result<List<Usuario>> {
+    suspend fun login(email: String, password: String): Result<String> {
         return try {
+            val credenciales = crearCredencialesMap(email, password)
+            val respuesta = RetrofitUsuario.usuarioApi.loginUsuario(credenciales)
 
-            val respuesta = RetrofitUsuario.usuarioApi.obtenerClientes()
+            // 1. MANEJO DEL RESULTADO
+            val resultado: Result<String> = when (respuesta.code()) { // Declaramos el tipo explícitamente
+                200 -> { // Éxito
+                    Result.success(respuesta.body() ?: "LOGIN_OK")
+                }
 
-            if (respuesta.isSuccessful) {
+                401 -> { // Fallo de autenticación
+                    val errorMessage = respuesta.errorBody()?.string() ?: "Credenciales inválidas."
+                    Result.failure(Exception(errorMessage))
+                }
 
-                val listaUsuarios = respuesta.body() ?: emptyList<Usuario>()
-                Result.success(listaUsuarios)
-            } else {
-
-                val codigo = respuesta.code()
-                val mensajeError = "Error del servidor: $codigo"
-                Result.failure(Exception(mensajeError))
+                else -> { // Otros errores
+                    val errorMessage = respuesta.errorBody()?.string() ?: "Error del servidor: ${respuesta.code()}"
+                    Result.failure(Exception(errorMessage))
+                }
             }
 
+            // 2. RETORNA EL RESULTADO DEL WHEN
+            resultado
 
         } catch (e: Exception) {
-
+            // Fallo de conexión
             Result.failure(Exception("Error de conexión: ${e.localizedMessage}"))
         }
     }
-    suspend fun agregarCliente(usuario: Usuario): Result<Usuario> {
+    private fun crearRegistroMap(email: String, password: String, nombre: String): Map<String, String> {
+        return mapOf(
+            "email" to email,
+            "password" to password,
+            "nombre" to nombre //
+        )
+    }
+
+
+    suspend fun register(nombre: String, email: String, password: String): Result<String> {
         return try {
-            val respuesta = RetrofitUsuario.usuarioApi.crearCliente(usuario)
 
-            if (respuesta.isSuccessful) {
-                // Si la respuesta es exitosa (200 o 201), obtenemos el usuario creado
-                val usuarioCreado = respuesta.body()
+            val credenciales = crearRegistroMap(email, password, nombre)
 
-                if (usuarioCreado != null) {
-                    Result.success(usuarioCreado)
-                } else {
-                    // Caso raro: El servidor dice OK pero no devolvió datos
-                    Result.failure(Exception("El servidor respondió OK pero sin cuerpo"))
+             val respuesta = RetrofitUsuario.usuarioApi.registrarUsuario(credenciales)
+
+
+            when (respuesta.code()) {
+                201 -> {
+
+                    Result.success(respuesta.body() ?: "REGISTRO_OK")
                 }
-            } else {
-                val codigo = respuesta.code()
-                Result.failure(Exception("Error al guardar: $codigo"))
+
+                409 -> {
+                    val errorMessage = respuesta.errorBody()?.string() ?: "El email ya está registrado."
+                    Result.failure(Exception(errorMessage))
+                }
+
+                else -> {
+                    val errorMessage = respuesta.errorBody()?.string() ?: "Error del servidor: ${respuesta.code()}"
+                    Result.failure(Exception(errorMessage))
+                }
             }
         } catch (e: Exception) {
+
             Result.failure(Exception("Error de conexión: ${e.localizedMessage}"))
         }
     }
 }
+
+
+
+
+

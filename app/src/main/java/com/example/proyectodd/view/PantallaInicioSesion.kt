@@ -82,7 +82,7 @@ fun PantallaInicioSesion(
     LaunchedEffect(estadoAuth) {
         if (estadoAuth is AuthUIState.Exito) {
             alExito()
-            viewModel.resetearEstado()
+            viewModel.estadoAuth
         }
     }
 

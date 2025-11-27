@@ -15,7 +15,7 @@ class AuthRepository(private val dataSource: AuthDataSource) {
                 return Result.failure(Exception("Este correo ya está registrado"))
             }
 
-            val contrasenaHash = dataSource.hashearContrasena(contrasena)
+
             val nuevoUsuario = Usuario(
                 nombre = nombre,
                 correo = correo,

@@ -11,18 +11,19 @@ import com.example.proyectodd.model.data.source.AuthDataSource
 import com.example.proyectodd.viewmodel.domain.usecase.IniciarSesionUseCase
 import com.example.proyectodd.viewmodel.domain.usecase.RegistrarUsuarioUseCase
 import com.example.proyectodd.viewmodel.state.AuthUIState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = AppDatabase.obtenerBaseDatos(application)
     private val dataSource = AuthDataSource(database.usuarioDao())
     private val repository = AuthRepository(dataSource)
-    private val iniciarSesionUseCase = IniciarSesionUseCase(repository)
-    private val registrarUsuarioUseCase = RegistrarUsuarioUseCase(repository)
+
 
     private val apiRepository = UsuarioRepositorio()
 
@@ -38,35 +39,47 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 _estadoAuth.value = AuthUIState.Cargando
 
-                // 1. Hacemos un GET a la API para traer los usuarios
-                val resultado = apiRepository.obtenerClientes()
 
-                resultado.onSuccess { listaUsuarios ->
-
-                    val usuarioEncontrado = listaUsuarios.find {
-                        it.correo == correo && it.contrasena == contrasena
-                    }
-
-                    if (usuarioEncontrado != null) {
-                        _usuarioActual.value = usuarioEncontrado
-                        _estadoAuth.value = AuthUIState.Exito(usuarioEncontrado)
-                    } else {
-                        _estadoAuth.value = AuthUIState.Error("Credenciales incorrectas o usuario no encontrado en la Nube")
-                    }
+                if (correo.isEmpty() || contrasena.isEmpty()) {
+                    _estadoAuth.value = AuthUIState.Error("Completa todos los campos.")
+                    return@launch
                 }
 
-                resultado.onFailure { exception ->
-                    _estadoAuth.value = AuthUIState.Error(
-                        "Error de conexión: ${exception.message}"
-                    )
-                }
 
+                val resultado = apiRepository.login(correo, contrasena)
+
+
+                withContext(Dispatchers.Main) {
+
+                    resultado.onSuccess { mensaje ->
+                        // Éxito: El servidor devolvió 200 OK.
+                        // Nota: En un proyecto real, el servidor devolvería el Usuario o un Token JWT aquí.
+                        val usuarioLogueado = Usuario(id = 0, nombre = "", correo = correo, contrasena = "")
+
+                        _usuarioActual.value = usuarioLogueado
+                        _estadoAuth.value = AuthUIState.Exito(usuarioLogueado)
+                    }
+
+                    resultado.onFailure { exception ->
+                        // Fallo: Error 401, 409, 500, o de conexión.
+                        _estadoAuth.value = AuthUIState.Error(
+                            // El mensaje ya viene del errorBody del Repositorio (ej: "Credenciales inválidas.")
+                            exception.message ?: "Error de autenticación."
+                        )
+                    }
+                }
             } catch (e: Exception) {
+
                 _estadoAuth.value = AuthUIState.Error("Error inesperado: ${e.message}")
+            } finally {
+
+                if (_estadoAuth.value == AuthUIState.Cargando) {
+                    _estadoAuth.value =
+                        AuthUIState.Error("Tiempo de espera agotado o error de red.")
+                }
             }
         }
     }
-
     fun registrarUsuario(
         nombre: String,
         correo: String,
@@ -75,53 +88,50 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     ) {
         viewModelScope.launch {
             try {
+                // Ponemos el estado en cargando
                 _estadoAuth.value = AuthUIState.Cargando
 
 
+                if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || confirmarContrasena.isEmpty()) {
+                    _estadoAuth.value = AuthUIState.Error("Completa todos los campos.")
+                    return@launch
+                }
                 if (contrasena != confirmarContrasena) {
-                    _estadoAuth.value = AuthUIState.Error("Las contraseñas no coinciden")
-                    return@launch
-                }
-                if (nombre.isEmpty() || correo.isEmpty()) {
-                    _estadoAuth.value = AuthUIState.Error("Completa todos los campos")
+                    _estadoAuth.value = AuthUIState.Error("Las contraseñas no coinciden.")
                     return@launch
                 }
 
 
-                val nuevoUsuario = Usuario(
-                    id = 0,
-                    nombre = nombre,
-                    correo = correo,
-                    contrasena = contrasena
-
-                )
+                val resultado = apiRepository.register(nombre, correo, contrasena)
 
 
-                val resultado = apiRepository.agregarCliente(nuevoUsuario)
+                resultado.onSuccess { mensaje ->
 
-                resultado.onSuccess { usuarioCreado ->
-                    _usuarioActual.value = usuarioCreado
-                    _estadoAuth.value = AuthUIState.Exito(usuarioCreado)
+                    val usuarioExito = Usuario(id = 0, nombre = nombre, correo = correo, contrasena = "")
+                    _estadoAuth.value = AuthUIState.Exito(usuarioExito)
                 }
 
                 resultado.onFailure { exception ->
+                    // Fallo: Muestra el mensaje de error de la API (409 Conflict, 500, o Timeout)
                     _estadoAuth.value = AuthUIState.Error(
-                        "Error al registrar: ${exception.message}"
+                        exception.message ?: "Error desconocido en el registro."
                     )
                 }
 
             } catch (e: Exception) {
-                _estadoAuth.value = AuthUIState.Error("Error inesperado: ${e.message}")
+                // Captura errores inesperados de Kotlin
+                _estadoAuth.value = AuthUIState.Error("Error inesperado en la aplicación: ${e.message}")
             }
         }
     }
 
-    fun resetearEstado() {
-        _estadoAuth.value = AuthUIState.Inactivo }
+        fun resetearEstado() {
+            _estadoAuth.value = AuthUIState.Inactivo
+        }
 
 
-    fun cerrarSesion() {
-        _usuarioActual.value = null
-        _estadoAuth.value = AuthUIState.Inactivo
+        fun cerrarSesion() {
+            _usuarioActual.value = null
+            _estadoAuth.value = AuthUIState.Inactivo
+        }
     }
-}

@@ -8,15 +8,12 @@ import retrofit2.http.PUT
 
 
     interface UsuarioApi {
-        @GET("clientes")
-        suspend fun obtenerClientes(): Response<List<Usuario>>
+        @POST("clientes/login")
+        suspend fun loginUsuario(@Body credenciales: Map<String, String>): Response<String> // Devuelve String (el mensaje de éxito/error)
 
-        @POST("clientes")
-        suspend fun crearCliente(@Body cliente: Usuario): Response<Usuario>
+        @POST("clientes/register")
+        suspend fun registrarUsuario(@Body credenciales: Map<String, String>): Response<String> // Devuelve String (el mensaje de éxito/error)
 
-
-        @PUT("clientes")
-        suspend fun actualizarCliente(@Body cliente: Usuario): Response<Usuario>
 
 
     }
