@@ -22,7 +22,7 @@ import com.example.proyectodd.model.Usuario
 
 
 @Composable
-fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpersonaje: () -> Unit, irPersonajeGuardado: () -> Unit) {
+fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpersonaje: () -> Unit, irPersonajeGuardado: () -> Unit, irAConjuros: () -> Unit) {
     val negro = Color(0xFF000000)
     val rojoOscuro = Color(0xFF991B1B)
     val rojoMedio = Color(0xFFDC2626)
@@ -196,6 +196,35 @@ fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpers
                                 }
 
                                 Spacer(modifier = Modifier.height(24.dp))
+                                // Botón ver conjuros
+                                Button(
+                                    onClick = {
+                                        playSound()
+                                        irAConjuros()
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(52.dp)
+                                        .border(2.dp, rojoMedio, RoundedCornerShape(4.dp)),
+                                    colors = ButtonDefaults.buttonColors(containerColor = rojoOscuro),
+                                    shape = RoundedCornerShape(4.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_scroll), // usa cualquier ícono que tengas
+                                        contentDescription = "Conjuros",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        "VER CONJUROS",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = 1.5.sp,
+                                        color = Color.White
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(24.dp))
 
                                 //divisor
                                 Row(
@@ -221,7 +250,6 @@ fun MenuPrincipalScreen(usuario: Usuario, cerrarSesion: () -> Unit, creacionpers
                                             .background(rojoMuyOscuro)
                                     )
                                 }
-
                                 Spacer(modifier = Modifier.height(24.dp))
 
                                 //boton cerrar sesion

@@ -25,8 +25,7 @@ sealed class Rutas(val ruta: String) {
     object Registro : Rutas("registro")
     object Inicio : Rutas("inicio")
 
-    // Mantenemos la misma clave que ya usas para ir al módulo de personajes desde el menú.
-    // AHORA esta ruta muestra la LISTA de personajes.
+
     object ListaPersonaje : Rutas("personajes")
 
     // NUEVAS subrutas para crear/editar
@@ -35,6 +34,8 @@ sealed class Rutas(val ruta: String) {
         const val ARG_ID = "id"
         fun of(id: Long) = "personajes/editar/$id"
     }
+    object Conjuros : Rutas("conjuros")
+
 
 }
 
@@ -142,6 +143,9 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
                         }
 
 
+                    },
+                    irAConjuros = {
+                        navController.navigate(Rutas.Conjuros.ruta)
                     }
 
                 )
@@ -192,5 +196,15 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
                 onSaved  = { navController.popBackStack() }
             )
         }
+
+        // CONJUROS
+        composable(
+            route = Rutas.Conjuros.ruta,
+            enterTransition = { fadeIn(animationSpec = tween(600)) },
+            exitTransition = { fadeOut(animationSpec = tween(600)) }
+        ) {
+            ConjurosView(navController)
+        }
+
     }
 }
