@@ -5,30 +5,41 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyectodd.model.Personaje
 import com.example.proyectodd.model.data.repository.PersonajeRepository
-import com.example.proyectodd.model.data.repository.UsuarioRepositorio
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlin.text.lowercase
 
 class PersonajeViewModel(
-    private val repo: PersonajeRepository
-
+    private val repo: PersonajeRepository,
+    private val authVM: AuthViewModel
 ) : ViewModel() {
 
+    val usuarioActual get() = authVM.usuarioActual.value
 
     private val _lista = MutableStateFlow<List<Personaje>>(emptyList())
     val lista: StateFlow<List<Personaje>> = _lista.asStateFlow()
 
-
     private val _estado = MutableStateFlow(vacio())
     val estado: StateFlow<Personaje> = _estado.asStateFlow()
 
-    fun nuevo() { _estado.value = vacio() }
+    init {
+        // Cargar personajes del usuario actual cuando exista uno
+        viewModelScope.launch {
+            authVM.usuarioActual.collect { usuario ->
+                if (usuario != null) {
+                    repo.observeByUsuario(usuario.id).collect { personajes ->
+                        _lista.value = personajes
+                    }
+                }
+            }
+        }
+    }
+
+    fun nuevo() {
+        val uid = usuarioActual?.id ?: 0L
+        _estado.value = vacio().copy(usuarioId = uid)
+    }
 
     fun cargar(id: Long) {
         viewModelScope.launch {
@@ -38,8 +49,12 @@ class PersonajeViewModel(
 
     fun guardar(onDone: () -> Unit) {
         viewModelScope.launch {
-            val p = _estado.value
-            if (p.id == 0L) repo.insert(p) else repo.update(p)
+            val uid = usuarioActual?.id ?: return@launch
+            val p = _estado.value.copy(usuarioId = uid)
+
+            if (p.id == 0L) repo.insert(p)
+            else repo.update(p)
+
             onDone()
         }
     }
@@ -51,6 +66,7 @@ class PersonajeViewModel(
         }
     }
 
+    // ACTUALIZADORES DE CAMPOS
 
     fun setNombre(v: String)            { _estado.value = _estado.value.copy(nombre = v) }
     fun setNivel(v: String)             { _estado.value = _estado.value.copy(nivel = v.toIntOrNull() ?: 0) }
@@ -78,6 +94,7 @@ class PersonajeViewModel(
 
     private fun vacio() = Personaje(
         id = 0L,
+        usuarioId = 0L,
         nombre = "",
         clase = "",
         raza = "",
@@ -95,12 +112,11 @@ class PersonajeViewModel(
         playerName = "",
         portraitUri = null
     )
+
     fun eliminar(personaje: Personaje, onDone: () -> Unit = {}) {
         viewModelScope.launch {
             repo.delete(personaje)
             onDone()
         }
     }
-
-    }
-
+}

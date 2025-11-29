@@ -12,8 +12,8 @@ object RetrofitUsuario {
     // USA 192.168.X.X SI ES CELULAR FÍSICO
     private const val BASE_URL = "http://192.168.1.134:8080/"
     private val client = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS) // 30 segundos para conectar
-        .readTimeout(30, TimeUnit.SECONDS)    // 30 segundos para leer
+        .connectTimeout(15, TimeUnit.SECONDS) // 15 segundos para conectar
+        .readTimeout(15, TimeUnit.SECONDS)    // 15 segundos para leer
         .build()
     val usuarioApi: UsuarioApi by lazy {
         Retrofit.Builder()

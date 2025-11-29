@@ -30,24 +30,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.proyectodd.model.Usuario
-import com.example.proyectodd.model.data.local.database.AppDatabase
-import com.example.proyectodd.model.data.repository.PersonajeRepository
 import com.example.proyectodd.viewmodel.PersonajeViewModel
-import com.example.proyectodd.viewmodel.PersonajeViewModelFactory
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
 private val Bg = Color(0xFF000000)
 private val Card = Color(0xFF292929)
 private val Line = Color(0xFF7F1D1D)
 private val Hint = Color(0xFFFFFFFF)
-
 
 @Composable
 fun CardDndForm(
@@ -58,24 +52,18 @@ fun CardDndForm(
 ) {
     val context = LocalContext.current
 
-
-    val vm: PersonajeViewModel = vmExternal ?: run {
-        val db = remember { AppDatabase.obtenerBaseDatos(context) }
-        val repo = remember { PersonajeRepository(db.personajeDao()) }
-        val factory = remember { PersonajeViewModelFactory(repo) }
-        viewModel(factory = factory)
-    }
-
+    // ✔ USAR SIEMPRE EL VIEWMODEL ENTREGADO DESDE NavegacionAuth
+    val vm = vmExternal
+        ?: error("PersonajeViewModel no fue entregado desde NavegacionAuth")
 
     val estado by vm.estado.collectAsState()
 
-
     var characterName by remember { mutableStateOf("") }
-    var level by remember{ mutableStateOf("") }
+    var level by remember { mutableStateOf("") }
     var race by remember { mutableStateOf("") }
     var clazz by remember { mutableStateOf("") }
     var background by remember { mutableStateOf("") }
-    var alignment by remember{ mutableStateOf("") }
+    var alignment by remember { mutableStateOf("") }
 
     var str by rememberSaveable { mutableStateOf("") }
     var dex by rememberSaveable { mutableStateOf("") }
@@ -93,7 +81,6 @@ fun CardDndForm(
 
     var playerName by rememberSaveable { mutableStateOf("") }
 
-
     LaunchedEffect(estado.id) {
         characterName = estado.nombre
         level = estado.nivel.takeIf { it != 0 }?.toString() ?: ""
@@ -109,12 +96,12 @@ fun CardDndForm(
         wis = estado.sab.takeIf { it != 0 }?.toString() ?: ""
         cha = estado.car.takeIf { it != 0 }?.toString() ?: ""
 
-        initiative = if (estado.iniciativa != 0) estado.iniciativa.toString() else ""
-        ac = if (estado.ac != 0) estado.ac.toString() else ""
-        passive = if (estado.percepcionPasiva != 0) estado.percepcionPasiva.toString() else ""
-        hp = if (estado.hp != 0) estado.hp.toString() else ""
-        saveDC = if (estado.saveDC != 0) estado.saveDC.toString() else ""
-        speed = if (estado.velocidad != 0) estado.velocidad.toString() else ""
+        initiative = estado.iniciativa.takeIf { it != 0 }?.toString() ?: ""
+        ac = estado.ac.takeIf { it != 0 }?.toString() ?: ""
+        passive = estado.percepcionPasiva.takeIf { it != 0 }?.toString() ?: ""
+        hp = estado.hp.takeIf { it != 0 }?.toString() ?: ""
+        saveDC = estado.saveDC.takeIf { it != 0 }?.toString() ?: ""
+        speed = estado.velocidad.takeIf { it != 0 }?.toString() ?: ""
 
         playerName = usuario.nombre
     }
@@ -126,6 +113,7 @@ fun CardDndForm(
             .padding(12.dp)
             .verticalScroll(rememberScrollState())
     ) {
+
         Column(
             Modifier
                 .fillMaxWidth()
@@ -135,7 +123,9 @@ fun CardDndForm(
                 .padding(14.dp)
         ) {
 
-            // Fila: Nombre + Nivel + Portrait
+            // -----------------------
+            // HEADER: NAME + LEVEL
+            // -----------------------
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
                 BannerField1(
                     label = "CHARACTER NAME",
@@ -162,7 +152,9 @@ fun CardDndForm(
                 )
             }
 
-
+            // -----------------------
+            // BASIC FIELDS
+            // -----------------------
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -183,7 +175,6 @@ fun CardDndForm(
                 )
             }
 
-
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -202,14 +193,17 @@ fun CardDndForm(
                 )
             }
 
+
             Spacer(Modifier.height(14.dp))
 
-
+            // -----------------------
+            // STATS
+            // -----------------------
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 AbilityBox("Str", str) { str = it.digits2(); vm.setStr(str) }
                 AbilityBox("Dex", dex) { dex = it.digits2(); vm.setDex(dex) }
                 AbilityBox("Con", con) { con = it.digits2(); vm.setCon(con) }
-                AbilityBox("Int", intg){ intg = it.digits2(); vm.setIntg(intg) }
+                AbilityBox("Int", intg) { intg = it.digits2(); vm.setIntg(intg) }
                 AbilityBox("Wis", wis) { wis = it.digits2(); vm.setSab(wis) }
                 AbilityBox("Cha", cha) { cha = it.digits2(); vm.setCar(cha) }
             }
@@ -244,6 +238,9 @@ fun CardDndForm(
 
             Spacer(Modifier.height(14.dp))
 
+            // -----------------------
+            // PLAYER NAME (usuario)
+            // -----------------------
             BannerField(
                 label = "PLAYER NAME",
                 value = playerName,
@@ -259,7 +256,6 @@ fun CardDndForm(
         }
     }
 }
-
 
 @Composable
 private fun AbilityBox(label: String, score: String, onChange: (String) -> Unit) {
@@ -441,7 +437,6 @@ private fun ShieldBox(
     }
 }
 
-
 @Composable
 private fun PortraitPicker(
     portraitUri: String?,
@@ -508,7 +503,6 @@ private fun PortraitPicker(
                 Text("Cámara", color = Color.White)
             }
         }
-
     }
 }
 
@@ -522,7 +516,6 @@ private fun createImageUri(context: Context): Uri {
         file
     )
 }
-
 
 private fun String.digits2() = filter(Char::isDigit).take(2)
 private fun String.digits3() = filter(Char::isDigit).take(3)

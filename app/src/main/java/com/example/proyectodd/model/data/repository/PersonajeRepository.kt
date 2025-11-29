@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class PersonajeRepository(private val dao: PersonajeDao) {
 
     // LISTA REACTIVA DE PERSONAJES
-    fun observeAll(): Flow<List<Personaje>> = dao.observeAll()
+    fun observeByUsuario(uid: Long) = dao.observeByUsuario(uid)
 
     // OBTENER UNO POR ID
     suspend fun getById(id: Long): Personaje? = dao.getById(id)

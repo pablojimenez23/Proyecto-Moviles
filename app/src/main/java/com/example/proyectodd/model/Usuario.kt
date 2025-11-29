@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "usuarios")
 data class Usuario(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     val nombre: String,
     val correo: String,
-    val contrasena: String,
+    val contrasenaHash: String,
     val fechaCreacion: Long = System.currentTimeMillis()
 )

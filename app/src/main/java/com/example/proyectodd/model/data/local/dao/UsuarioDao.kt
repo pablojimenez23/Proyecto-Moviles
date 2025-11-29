@@ -1,14 +1,12 @@
 package com.example.proyectodd.model.data.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.proyectodd.model.Usuario
 
 @Dao
 interface UsuarioDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertarUsuario(usuario: Usuario): Long
 
     @Query("SELECT * FROM usuarios WHERE correo = :correo LIMIT 1")
@@ -17,12 +15,12 @@ interface UsuarioDao {
     @Query("SELECT COUNT(*) FROM usuarios WHERE correo = :correo")
     suspend fun correoExiste(correo: String): Int
 
-    @Query("SELECT * FROM usuarios WHERE id = :userId")
-    suspend fun obtenerUsuarioPorId(userId: Int): Usuario?
+    @Query("SELECT * FROM usuarios WHERE id = :userId LIMIT 1")
+    suspend fun obtenerUsuarioPorId(userId: Long): Usuario?
 
     @Query("SELECT * FROM usuarios")
     suspend fun obtenerTodosLosUsuarios(): List<Usuario>
 
     @Query("DELETE FROM usuarios WHERE id = :userId")
-    suspend fun eliminarUsuario(userId: Int)
+    suspend fun eliminarUsuario(userId: Long)
 }

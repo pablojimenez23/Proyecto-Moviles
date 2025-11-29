@@ -48,11 +48,13 @@ fun NavegacionAuth(viewModel: AuthViewModel) {
     val ctx = androidx.compose.ui.platform.LocalContext.current
     val personajesVM: PersonajeViewModel = viewModel(
         factory = PersonajeViewModelFactory(
-            PersonajeRepository(
+            repo = PersonajeRepository(
                 dao = AppDatabase.obtenerBaseDatos(ctx).personajeDao()
-            )
+            ),
+            authVM = viewModel
         )
     )
+
 
     NavHost(
         navController = navController,

@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 interface PersonajeDao {
 
     // LISTADO REACTIVO
-    @Query("SELECT * FROM personajes ORDER BY LOWER(nombre) ASC")
-    fun observeAll(): Flow<List<Personaje>>
+    @Query("SELECT * FROM personajes WHERE usuarioId = :uid ORDER BY LOWER(nombre) ASC")
+    fun observeByUsuario(uid: Long): Flow<List<Personaje>>
 
     // OBTENER UNO POR ID
     @Query("SELECT * FROM personajes WHERE id = :id LIMIT 1")

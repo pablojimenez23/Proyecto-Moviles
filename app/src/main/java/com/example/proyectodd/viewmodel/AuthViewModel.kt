@@ -3,13 +3,10 @@ package com.example.proyectodd.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.proyectodd.model.data.local.database.AppDatabase
 import com.example.proyectodd.model.Usuario
-import com.example.proyectodd.model.data.repository.AuthRepository
+import com.example.proyectodd.model.data.local.database.AppDatabase
 import com.example.proyectodd.model.data.repository.UsuarioRepositorio
 import com.example.proyectodd.model.data.source.AuthDataSource
-import com.example.proyectodd.viewmodel.domain.usecase.IniciarSesionUseCase
-import com.example.proyectodd.viewmodel.domain.usecase.RegistrarUsuarioUseCase
 import com.example.proyectodd.viewmodel.state.AuthUIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,12 +18,7 @@ import kotlinx.coroutines.withContext
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = AppDatabase.obtenerBaseDatos(application)
-    private val dataSource = AuthDataSource(database.usuarioDao())
-    private val repository = AuthRepository(dataSource)
-
-
     private val apiRepository = UsuarioRepositorio()
-
 
     private val _estadoAuth = MutableStateFlow<AuthUIState>(AuthUIState.Inactivo)
     val estadoAuth: StateFlow<AuthUIState> = _estadoAuth.asStateFlow()
@@ -34,52 +26,66 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val _usuarioActual = MutableStateFlow<Usuario?>(null)
     val usuarioActual: StateFlow<Usuario?> = _usuarioActual.asStateFlow()
 
+
+    //  LOGIN HÍBRIDO (microservicio + persistencia local sincronizada)
+
     fun iniciarSesion(correo: String, contrasena: String) {
         viewModelScope.launch {
             try {
                 _estadoAuth.value = AuthUIState.Cargando
-
 
                 if (correo.isEmpty() || contrasena.isEmpty()) {
                     _estadoAuth.value = AuthUIState.Error("Completa todos los campos.")
                     return@launch
                 }
 
-
+                // 1) Login remoto usando microservicio
                 val resultado = apiRepository.login(correo, contrasena)
 
+                resultado.onSuccess {
 
-                withContext(Dispatchers.Main) {
+                    // 2) Sincronización con usuario local
+                    val dao = database.usuarioDao()
+                    val authLocal = AuthDataSource(dao)
 
-                    resultado.onSuccess { mensaje ->
-                        // Éxito: El servidor devolvió 200 OK.
-                        // Nota: En un proyecto real, el servidor devolvería el Usuario o un Token JWT aquí.
-                        val usuarioLogueado = Usuario(id = 0, nombre = "", correo = correo, contrasena = "")
+                    var usuarioLocal = authLocal.obtenerUsuarioPorCorreo(correo)
 
-                        _usuarioActual.value = usuarioLogueado
-                        _estadoAuth.value = AuthUIState.Exito(usuarioLogueado)
-                    }
+                    // 3) Si no existe localmente, crearlo
+                    if (usuarioLocal == null) {
+                        val contrasenaHash = authLocal.hashearContrasena(contrasena)
 
-                    resultado.onFailure { exception ->
-                        // Fallo: Error 401, 409, 500, o de conexión.
-                        _estadoAuth.value = AuthUIState.Error(
-                            // El mensaje ya viene del errorBody del Repositorio (ej: "Credenciales inválidas.")
-                            exception.message ?: "Error de autenticación."
+                        val idInsertado = authLocal.insertarUsuario(
+                            Usuario(
+                                nombre = "", // No se obtiene desde el microservicio
+                                correo = correo,
+                                contrasenaHash = contrasenaHash
+                            )
                         )
+
+                        usuarioLocal = dao.obtenerUsuarioPorId(idInsertado)
                     }
+
+                    // 4) Establecer usuarioActual
+                    _usuarioActual.value = usuarioLocal
+                    _estadoAuth.value = AuthUIState.Exito(usuarioLocal!!)
                 }
+
+                resultado.onFailure { exception ->
+                    _estadoAuth.value = AuthUIState.Error(
+                        exception.message ?: "Error de autenticación."
+                    )
+                }
+
             } catch (e: Exception) {
-
                 _estadoAuth.value = AuthUIState.Error("Error inesperado: ${e.message}")
-            } finally {
-
-                if (_estadoAuth.value == AuthUIState.Cargando) {
-                    _estadoAuth.value =
-                        AuthUIState.Error("Tiempo de espera agotado o error de red.")
-                }
             }
         }
     }
+
+
+
+
+    //  REGISTRO HÍBRIDO (microservicio + creación automática en local)
     fun registrarUsuario(
         nombre: String,
         correo: String,
@@ -88,50 +94,64 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     ) {
         viewModelScope.launch {
             try {
-                // Ponemos el estado en cargando
                 _estadoAuth.value = AuthUIState.Cargando
-
 
                 if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || confirmarContrasena.isEmpty()) {
                     _estadoAuth.value = AuthUIState.Error("Completa todos los campos.")
                     return@launch
                 }
+
                 if (contrasena != confirmarContrasena) {
                     _estadoAuth.value = AuthUIState.Error("Las contraseñas no coinciden.")
                     return@launch
                 }
 
-
+                // 1) Registro remoto
                 val resultado = apiRepository.register(nombre, correo, contrasena)
 
+                resultado.onSuccess {
 
-                resultado.onSuccess { mensaje ->
+                    // 2) Registrar también el usuario localmente
+                    val dao = database.usuarioDao()
+                    val authLocal = AuthDataSource(dao)
 
-                    val usuarioExito = Usuario(id = 0, nombre = nombre, correo = correo, contrasena = "")
-                    _estadoAuth.value = AuthUIState.Exito(usuarioExito)
+                    val contrasenaHash = authLocal.hashearContrasena(contrasena)
+
+                    val idInsertado = authLocal.insertarUsuario(
+                        Usuario(
+                            nombre = nombre,
+                            correo = correo,
+                            contrasenaHash = contrasenaHash
+                        )
+                    )
+
+                    val usuarioLocal = dao.obtenerUsuarioPorId(idInsertado)
+
+                    // 3) Marcos usuarioActual
+                    _usuarioActual.value = usuarioLocal
+                    _estadoAuth.value = AuthUIState.Exito(usuarioLocal!!)
                 }
 
                 resultado.onFailure { exception ->
-                    // Fallo: Muestra el mensaje de error de la API (409 Conflict, 500, o Timeout)
                     _estadoAuth.value = AuthUIState.Error(
                         exception.message ?: "Error desconocido en el registro."
                     )
                 }
 
             } catch (e: Exception) {
-                // Captura errores inesperados de Kotlin
-                _estadoAuth.value = AuthUIState.Error("Error inesperado en la aplicación: ${e.message}")
+                _estadoAuth.value = AuthUIState.Error("Error inesperado: ${e.message}")
             }
         }
     }
 
-        fun resetearEstado() {
-            _estadoAuth.value = AuthUIState.Inactivo
-        }
 
-
-        fun cerrarSesion() {
-            _usuarioActual.value = null
-            _estadoAuth.value = AuthUIState.Inactivo
-        }
+    // UTILIDADES
+    fun resetearEstado() {
+        _estadoAuth.value = AuthUIState.Inactivo
     }
+
+    fun cerrarSesion() {
+        _usuarioActual.value = null
+        _estadoAuth.value = AuthUIState.Inactivo
+    }
+}
