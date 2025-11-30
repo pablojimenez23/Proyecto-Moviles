@@ -9,6 +9,10 @@ import org.junit.runner.Description
 /**
  * UBICACIÓN: app/src/test/java/com/example/proyectodd/MainDispatcherRule.kt
  */
+
+import org.robolectric.annotation.Config
+
+@Config(sdk = [34])
 @ExperimentalCoroutinesApi
 class MainDispatcherRule(
     private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()

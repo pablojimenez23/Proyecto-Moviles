@@ -13,6 +13,10 @@ import org.junit.Test
 /**
  * UBICACIÓN: app/src/test/java/com/example/proyectodd/AuthRepositoryTest.kt
  */
+
+import org.robolectric.annotation.Config
+
+@Config(sdk = [34])
 class AuthRepositoryTest {
 
     private lateinit var dataSource: AuthDataSource

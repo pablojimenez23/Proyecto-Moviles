@@ -11,7 +11,7 @@ import org.robolectric.annotation.Config
  * UBICACIÓN: app/src/test/java/com/example/proyectodd/domain/validator/AuthValidatorTest.kt
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [28])
+@Config(sdk = [34])
 class AuthValidatorTest {
 
     // ==================== VALIDAR NOMBRE ====================

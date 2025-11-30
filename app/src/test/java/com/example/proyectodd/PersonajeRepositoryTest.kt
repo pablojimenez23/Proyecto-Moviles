@@ -14,6 +14,11 @@ import org.junit.Test
 /**
  * UBICACIÓN: app/src/test/java/com/example/proyectodd/PersonajeRepositoryTest.kt
  */
+
+import org.robolectric.annotation.Config
+
+@Config(sdk = [34])
+
 class PersonajeRepositoryTest {
 
     private lateinit var dao: PersonajeDao

@@ -9,8 +9,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.robolectric.annotation.Config
 
-
+@Config(sdk = [34])
 class AuthDataSourceTest {
 
     private lateinit var usuarioDao: UsuarioDao

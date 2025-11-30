@@ -15,6 +15,10 @@ import retrofit2.Response
 /**
  * UBICACIÓN: app/src/test/java/com/example/proyectodd/data/repository/UsuarioRepositorioTest.kt
  */
+
+import org.robolectric.annotation.Config
+
+@Config(sdk = [34])
 class UsuarioRepositorioTest {
 
     private lateinit var api: UsuarioApi

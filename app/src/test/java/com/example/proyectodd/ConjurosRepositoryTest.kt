@@ -15,6 +15,9 @@ import org.junit.Test
 /**
  * UBICACIÓN: app/src/test/java/com/example/proyectodd/ConjurosRepositoryTest.kt
  */
+import org.robolectric.annotation.Config
+
+@Config(sdk = [34])
 class ConjurosRepositoryTest {
 
     private lateinit var api: ConjurosApi

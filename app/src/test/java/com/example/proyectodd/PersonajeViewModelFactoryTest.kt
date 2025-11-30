@@ -17,7 +17,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.robolectric.annotation.Config
 
+@Config(sdk = [34])
 @ExperimentalCoroutinesApi
 class PersonajeViewModelFactoryTest {
 

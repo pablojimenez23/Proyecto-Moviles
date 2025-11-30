@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.proyectodd"
-        minSdk = 33
+        minSdk = 34
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -51,11 +51,22 @@ android {
         }
     }
 
-    // ✅ AGREGAR CONFIGURACIÓN DE TESTS
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-        }
+            isReturnDefaultValues = true
+
+
+    }
+    }
+}
+
+tasks.withType<Test>().configureEach {
+
+
+    if (name == "testDebugUnitTest") {
+
+        systemProperty("robolectric.defaultRuntimeSdk", "34")
     }
 }
 

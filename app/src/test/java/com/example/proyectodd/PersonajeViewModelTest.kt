@@ -21,6 +21,10 @@ import org.junit.Test
 /**
  * UBICACIÓN: app/src/test/java/com/example/proyectodd/viewmodel/PersonajeViewModelTest.kt
  */
+
+import org.robolectric.annotation.Config
+
+@Config(sdk = [34])
 @ExperimentalCoroutinesApi
 class PersonajeViewModelTest {
 

@@ -9,6 +9,10 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
+
+import org.robolectric.annotation.Config
+
+@Config(sdk = [34])
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {

@@ -47,8 +47,8 @@ private val Hint = Color(0xFFFFFFFF)
 fun CardDndForm(
     usuario: Usuario,
     vmExternal: PersonajeViewModel? = null,
-    onCancel: () -> Unit = {},
-    onSaved: () -> Unit = {}
+    onCancel: () -> Unit ,
+    onSaved: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -250,7 +250,7 @@ fun CardDndForm(
 
             Spacer(Modifier.height(16.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedButton(onClick = onCancel) { Text("Cancelar") }
+                Button(onClick = onCancel) { Text("Cancelar") }
                 Button(onClick = { vm.guardar(onSaved) }) { Text("Guardar", color = Color.White) }
             }
         }

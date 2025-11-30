@@ -20,7 +20,7 @@ import org.robolectric.annotation.Config
  * IMPORTANTE: Usa Robolectric para poder ejecutar código de Android en tests JVM
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [28])
+@Config(sdk = [34])
 class UseCasesTest {
 
     private lateinit var repository: AuthRepository
