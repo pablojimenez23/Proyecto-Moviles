@@ -68,29 +68,85 @@ class PersonajeViewModel(
 
     // ACTUALIZADORES DE CAMPOS
 
-    fun setNombre(v: String)            { _estado.value = _estado.value.copy(nombre = v) }
-    fun setNivel(v: String)             { _estado.value = _estado.value.copy(nivel = v.toIntOrNull() ?: 0) }
-    fun setRaza(v: String)              { _estado.value = _estado.value.copy(raza = v) }
-    fun setClase(v: String)             { _estado.value = _estado.value.copy(clase = v) }
-    fun setTrasfondo(v: String)         { _estado.value = _estado.value.copy(trasfondo = v) }
-    fun setAlineamiento(v: String)      { _estado.value = _estado.value.copy(alineamiento = v) }
+    fun setNombre(v: String) {
+        _estado.value = _estado.value.copy(nombre = v)
+    }
 
-    fun setStr(v: String)               { _estado.value = _estado.value.copy(str = v.toIntOrNull() ?: 0) }
-    fun setDex(v: String)               { _estado.value = _estado.value.copy(dex = v.toIntOrNull() ?: 0) }
-    fun setCon(v: String)               { _estado.value = _estado.value.copy(con = v.toIntOrNull() ?: 0) }
-    fun setIntg(v: String)              { _estado.value = _estado.value.copy(intg = v.toIntOrNull() ?: 0) }
-    fun setSab(v: String)               { _estado.value = _estado.value.copy(sab = v.toIntOrNull() ?: 0) }
-    fun setCar(v: String)               { _estado.value = _estado.value.copy(car = v.toIntOrNull() ?: 0) }
+    fun setNivel(v: String) {
+        _estado.value = _estado.value.copy(nivel = v.toIntOrNull() ?: 0)
+    }
 
-    fun setAC(v: String)                { _estado.value = _estado.value.copy(ac = v.toIntOrNull() ?: 0) }
-    fun setIniciativa(v: String)        { _estado.value = _estado.value.copy(iniciativa = v.toIntOrNull() ?: 0) }
-    fun setVelocidad(v: String)         { _estado.value = _estado.value.copy(velocidad = v.toIntOrNull() ?: 0) }
-    fun setPercepcionPasiva(v: String)  { _estado.value = _estado.value.copy(percepcionPasiva = v.toIntOrNull() ?: 0) }
-    fun setSaveDC(v: String)            { _estado.value = _estado.value.copy(saveDC = v.toIntOrNull() ?: 0) }
-    fun setHP(v: String)                { _estado.value = _estado.value.copy(hp = v.toIntOrNull() ?: 0) }
+    fun setRaza(v: String) {
+        _estado.value = _estado.value.copy(raza = v)
+    }
 
-    fun setPlayerName(v: String)        { _estado.value = _estado.value.copy(playerName = v) }
-    fun setPortrait(uri: Uri?)          { _estado.value = _estado.value.copy(portraitUri = uri?.toString()) }
+    fun setClase(v: String) {
+        _estado.value = _estado.value.copy(clase = v)
+    }
+
+    fun setTrasfondo(v: String) {
+        _estado.value = _estado.value.copy(trasfondo = v)
+    }
+
+    fun setAlineamiento(v: String) {
+        _estado.value = _estado.value.copy(alineamiento = v)
+    }
+
+    fun setStr(v: String) {
+        _estado.value = _estado.value.copy(str = v.toIntOrNull() ?: 0)
+    }
+
+    fun setDex(v: String) {
+        _estado.value = _estado.value.copy(dex = v.toIntOrNull() ?: 0)
+    }
+
+    fun setCon(v: String) {
+        _estado.value = _estado.value.copy(con = v.toIntOrNull() ?: 0)
+    }
+
+    fun setIntg(v: String) {
+        _estado.value = _estado.value.copy(intg = v.toIntOrNull() ?: 0)
+    }
+
+    fun setSab(v: String) {
+        _estado.value = _estado.value.copy(sab = v.toIntOrNull() ?: 0)
+    }
+
+    fun setCar(v: String) {
+        _estado.value = _estado.value.copy(car = v.toIntOrNull() ?: 0)
+    }
+
+    fun setAC(v: String) {
+        _estado.value = _estado.value.copy(ac = v.toIntOrNull() ?: 0)
+    }
+
+    fun setIniciativa(v: String) {
+        _estado.value = _estado.value.copy(iniciativa = v.toIntOrNull() ?: 0)
+    }
+
+    fun setVelocidad(v: String) {
+        _estado.value = _estado.value.copy(velocidad = v.toIntOrNull() ?: 0)
+    }
+
+    fun setPercepcionPasiva(v: String) {
+        _estado.value = _estado.value.copy(percepcionPasiva = v.toIntOrNull() ?: 0)
+    }
+
+    fun setSaveDC(v: String) {
+        _estado.value = _estado.value.copy(saveDC = v.toIntOrNull() ?: 0)
+    }
+
+    fun setHP(v: String) {
+        _estado.value = _estado.value.copy(hp = v.toIntOrNull() ?: 0)
+    }
+
+    fun setPlayerName(v: String) {
+        _estado.value = _estado.value.copy(playerName = v)
+    }
+
+    fun setPortrait(uri: Uri?) {
+        _estado.value = _estado.value.copy(portraitUri = uri?.toString())
+    }
 
     private fun vacio() = Personaje(
         id = 0L,

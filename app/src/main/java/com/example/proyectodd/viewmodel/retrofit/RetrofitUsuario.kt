@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitUsuario {
     // USA 10.0.2.2 SI ES EMULADOR
     // USA 192.168.X.X SI ES CELULAR FÍSICO
-    private const val BASE_URL = "http://192.168.1.134:8080/"
+    private const val BASE_URL = "http://192.168.56.1:8080/"
     private val client = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS) // 15 segundos para conectar
         .readTimeout(15, TimeUnit.SECONDS)    // 15 segundos para leer
