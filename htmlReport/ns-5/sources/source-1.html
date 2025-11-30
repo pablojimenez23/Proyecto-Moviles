@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AuthRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.proyectodd.model.data.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: AuthRepository (com.example.proyectodd.model.data.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AuthRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (19/19)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AuthRepository$iniciarSesion$1</td>
+  </tr>
+  <tr>
+    <td class="name">AuthRepository$registrarUsuario$1</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (19/19)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.proyectodd.model.data.repository
+&nbsp;
+&nbsp;import com.example.proyectodd.model.Usuario
+&nbsp;import com.example.proyectodd.model.data.source.AuthDataSource
+&nbsp;
+<b class="fc">&nbsp;class AuthRepository(private val dataSource: AuthDataSource) {</b>
+&nbsp;
+&nbsp;    suspend fun registrarUsuario(
+&nbsp;        nombre: String,
+&nbsp;        correo: String,
+&nbsp;        contrasena: String
+&nbsp;    ): Result&lt;Usuario&gt; {
+&nbsp;        return try {
+&nbsp;
+<b class="fc">&nbsp;            if (dataSource.correoExiste(correo)) {</b>
+<b class="fc">&nbsp;                return Result.failure(Exception(&quot;Este correo ya está registrado&quot;))</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            val contrasenaHash = dataSource.hashearContrasena(contrasena)</b>
+&nbsp;
+<b class="fc">&nbsp;            val nuevoUsuario = Usuario(</b>
+<b class="fc">&nbsp;                nombre = nombre,</b>
+<b class="fc">&nbsp;                correo = correo,</b>
+<b class="fc">&nbsp;                contrasenaHash = contrasenaHash</b>
+&nbsp;            )
+&nbsp;
+<b class="fc">&nbsp;            val userId = dataSource.insertarUsuario(nuevoUsuario)</b>
+&nbsp;
+<b class="fc">&nbsp;            val usuarioCreado = nuevoUsuario.copy(id = userId)</b>
+&nbsp;
+<b class="fc">&nbsp;            Result.success(usuarioCreado)</b>
+&nbsp;
+&nbsp;        } catch (e: Exception) {
+<b class="fc">&nbsp;            Result.failure(Exception(&quot;Error al registrar usuario: ${e.message}&quot;))</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    suspend fun iniciarSesion(correo: String, contrasena: String): Result&lt;Usuario&gt; {
+&nbsp;        return try {
+&nbsp;
+<b class="fc">&nbsp;            val usuario = dataSource.obtenerUsuarioPorCorreo(correo)</b>
+<b class="fc">&nbsp;                ?: return Result.failure(Exception(&quot;Usuario no encontrado&quot;))</b>
+&nbsp;
+<b class="fc">&nbsp;            val contrasenaHash = dataSource.hashearContrasena(contrasena)</b>
+&nbsp;
+<b class="fc">&nbsp;            return if (usuario.contrasenaHash == contrasenaHash) {</b>
+<b class="fc">&nbsp;                Result.success(usuario)</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                Result.failure(Exception(&quot;Contraseña incorrecta&quot;))</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        } catch (e: Exception) {
+<b class="fc">&nbsp;            Result.failure(Exception(&quot;Error al iniciar sesión: ${e.message}&quot;))</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-29 23:42</div>
+</div>
+</body>
+</html>

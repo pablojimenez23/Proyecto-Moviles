@@ -1,0 +1,112 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PersonajeDao</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.proyectodd.model.data.local.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: PersonajeDao (com.example.proyectodd.model.data.local.dao)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">PersonajeDao$Subclass6</td>
+  </tr>
+  <tr>
+    <td class="name">PersonajeDao$Subclass6$auxiliary$NadPAI82</td>
+  </tr>
+  <tr>
+    <td class="name">PersonajeDao$Subclass6$auxiliary$oSoELFam</td>
+  </tr>
+  <tr>
+    <td class="name">PersonajeDao$Subclass6$auxiliary$tlTFsIIl</td>
+  </tr>
+  <tr>
+    <td class="name">PersonajeDao$Subclass6$auxiliary$UOTfpblD</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.proyectodd.model.data.local.dao
+&nbsp;
+&nbsp;import androidx.room.*
+&nbsp;import com.example.proyectodd.model.Personaje
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;
+&nbsp;@Dao
+&nbsp;interface PersonajeDao {
+&nbsp;
+&nbsp;    // LISTADO REACTIVO
+&nbsp;    @Query(&quot;SELECT * FROM personajes WHERE usuarioId = :uid ORDER BY LOWER(nombre) ASC&quot;)
+&nbsp;    fun observeByUsuario(uid: Long): Flow&lt;List&lt;Personaje&gt;&gt;
+&nbsp;
+&nbsp;    // OBTENER UNO POR ID
+&nbsp;    @Query(&quot;SELECT * FROM personajes WHERE id = :id LIMIT 1&quot;)
+&nbsp;    suspend fun getById(id: Long): Personaje?
+&nbsp;
+&nbsp;    // INSERTAR NUEVO
+&nbsp;    @Insert(onConflict = OnConflictStrategy.ABORT)
+&nbsp;    suspend fun insert(p: Personaje): Long
+&nbsp;
+&nbsp;    // ACTUALIZAR EXISTENTE
+&nbsp;    @Update
+&nbsp;    suspend fun update(p: Personaje)
+&nbsp;
+&nbsp;    // ELIMINAR (opcional, por si luego agregamos borrar)
+&nbsp;    @Delete
+&nbsp;    suspend fun delete(p: Personaje)
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-29 23:42</div>
+</div>
+</body>
+</html>

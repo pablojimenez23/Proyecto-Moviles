@@ -1,0 +1,109 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UsuarioDao</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.proyectodd.model.data.local.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: UsuarioDao (com.example.proyectodd.model.data.local.dao)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass2</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass2$auxiliary$BIZox9Od</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass2$auxiliary$iQyUjPg5</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass2$auxiliary$Sh0xbk7M</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass2$auxiliary$wI5W3pgM</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.proyectodd.model.data.local.dao
+&nbsp;
+&nbsp;import androidx.room.*
+&nbsp;import com.example.proyectodd.model.Usuario
+&nbsp;
+&nbsp;@Dao
+&nbsp;interface UsuarioDao {
+&nbsp;
+&nbsp;    @Insert(onConflict = OnConflictStrategy.ABORT)
+&nbsp;    suspend fun insertarUsuario(usuario: Usuario): Long
+&nbsp;
+&nbsp;    @Query(&quot;SELECT * FROM usuarios WHERE correo = :correo LIMIT 1&quot;)
+&nbsp;    suspend fun obtenerUsuarioPorCorreo(correo: String): Usuario?
+&nbsp;
+&nbsp;    @Query(&quot;SELECT COUNT(*) FROM usuarios WHERE correo = :correo&quot;)
+&nbsp;    suspend fun correoExiste(correo: String): Int
+&nbsp;
+&nbsp;    @Query(&quot;SELECT * FROM usuarios WHERE id = :userId LIMIT 1&quot;)
+&nbsp;    suspend fun obtenerUsuarioPorId(userId: Long): Usuario?
+&nbsp;
+&nbsp;    @Query(&quot;SELECT * FROM usuarios&quot;)
+&nbsp;    suspend fun obtenerTodosLosUsuarios(): List&lt;Usuario&gt;
+&nbsp;
+&nbsp;    @Query(&quot;DELETE FROM usuarios WHERE id = :userId&quot;)
+&nbsp;    suspend fun eliminarUsuario(userId: Long)
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-29 23:42</div>
+</div>
+</body>
+</html>
