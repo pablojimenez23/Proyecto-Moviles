@@ -6,7 +6,7 @@ Este proyecto corresponde a una aplicación móvil (Android) desarrollada con Ko
 
 ## 1. Información del Proyecto
 
-* Nombre de la App:* Card DnD
+* Nombre de la App: Card DnD
 * **Integrantes:**
     * Felix Elias Vargas Olivares
     * Raul Andres Fuenzalida Sierralta
