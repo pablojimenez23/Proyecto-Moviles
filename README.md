@@ -6,7 +6,7 @@ Este proyecto corresponde a una aplicación móvil (Android) desarrollada con Ko
 
 ## 1. Información del Proyecto
 
-* Nombre de la App:** Card DnD
+* Nombre de la App:* Card DnD
 * **Integrantes:**
     * Felix Elias Vargas Olivares
     * Raul Andres Fuenzalida Sierralta
@@ -62,12 +62,3 @@ Para ejecutar el proyecto de principio a fin, sigue estos pasos:
     (Ejemplo: `http://192.168.1.11:8080/`)
 5.  **Ejecutar la App:** Ejecuta la aplicación en el dispositivo/emulador. La aplicación ya podrá comunicarse con el backend.
 
----
-
-##  5. Evidencia del Proyecto
-
-* **APK Firmado (Para Instalación Rápida):**
-    [Añade la ubicación del archivo .apk dentro de tu repositorio, p. ej.: `release/app-release.apk`]
-* **Ubicación del Archivo .jks (Key Store):**
-    [Añade la ruta del archivo .jks que usaste para firmar el APK, p. ej.: `keys/my-keystore.jks`]
-* **Evidencia de Trabajo Colaborativo:** Se adjuntan los registros de **commits por persona** en el historial de Git.
